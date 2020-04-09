@@ -4,7 +4,24 @@ import webbrowser
 import pathlib
 from robot.libraries.BuiltIn import BuiltIn
 
+__version__ = '0.1.0'
+
 class LiveResults:
+    """|
+|
+===================================================
+robotframework-liveresults
+===================================================
+Live Results ... 
+|
+Installation
+------------
+If you already have Python >= 3.6 with pip installed, you can simply
+run:
+``pip install --upgrade robotframework-liveresults``
+"""
+	
+	
     ROBOT_LISTENER_API_VERSION = 3
  
     def __init__(self, filename='RF_Live_Results.html', refresh=5, show=True):
