@@ -1,7 +1,8 @@
 # Robotframework Live Results
-Robot Framework Listener to get Live Results in a web page while RF execution is in progress [![HitCount](http://hits.dwyl.io/ franky1964/RF-LiveResults.svg)](http://hits.dwyl.io/a franky1964/RF-LiveResults)
+Robot Framework Listener to get Live Results in a web page while RF execution is in progress
+[![HitCount](http://hits.dwyl.com/franky1964/RF-LiveResults.svg)](http://hits.dwyl.com/franky1964/RF-LiveResults)
 
-    > Uses ROBOT_LISTENER_API_VERSION = 3
+> Uses ROBOT_LISTENER_API_VERSION = 3
     
 Steps to Use:
 
