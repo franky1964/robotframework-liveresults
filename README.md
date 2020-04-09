@@ -1,2 +1,2 @@
 # RF-LiveResults
-Robot Framework Listener to get Live Results in a wep page
+Robot Framework Listener to get Live Results in a web page
