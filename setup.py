@@ -33,7 +33,7 @@ setup(
     ],
     install_requires=[
         'robotframework >= 3.1',
-        'SeleniumCapLibrary'
+        'screencaplibrary'
     ],
     python_requires='>=3.6'
 )
