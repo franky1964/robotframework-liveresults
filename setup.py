@@ -19,7 +19,7 @@ setup(
     description="A listener for Live Results of Robot Framework execution.",
     long_description="To be done",
     long_description_content_type="text/x-rst",
-    url="https://github.com/franky1964/RF-LiveResults",
+    url="https://github.com/franky1964/robotframework-liveresults",
     packages=['LiveResults'],
     classifiers=[
         "Programming Language :: Python :: 3",
