@@ -30,4 +30,4 @@ Available Results:
 
 *Screenshot*
 
-<img src="/LiveLogs.jpg" alt="LiveLogs">
+<img src="/LiveResults.jpg" alt="LiveResults">
