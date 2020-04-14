@@ -6,28 +6,25 @@ Robot Framework Listener to get Live Results in a web page while RF execution is
     
 Steps to Use:
 
- - Step 1: Download or clone this repo
- 
- - Step 2: Copy `LiveResults.py` to your project or use 'pip install git+https://github.com/franky1964/RF-LiveResults.git'
+ - Step 1: Installation:
+   > - Download or clone this repo
+       or Copy `LiveResults` folder to your project 
+       or use 'pip install git+https://github.com/franky1964/robotframework-liveresults.git'
 
- - Step 3: Execute test case/suites using LiveResults Listenr
+ - Step 2: Execute test case/suites using LiveResults Listener
    > - `robot --listener LiveResults Tests` 
 
- - Step 4: Optional: A new browser will be opened with logs
-   > Note: Page refresh's for every 5 seconds.
-   > - Users can modify reload time by using
-   > - `<meta http-equiv="refresh" content="5" >`
-   > - Users can specify the filename of the page:          robot --listener LiveResults:myPage.html Tests
-   > - Users can specify the option for browser is opened:  robot --listener LiveResults:myPage.html Tests
-   > - Users can specify the filename of the page:          robot --listener LiveResults:myPage.html Tests
-   
+ - Step 3 Options to be used:
+   > - Chnage default page name 'RF_Live_Results.html' by using: robot --listener LiveResults:myPage.html Tests
+   > - Default refresh time cn be changed by using:              robot --listener LiveResults:myPage.html:40 Tests
+   > - Option if browser is opened can be changed by using:      robot --listener LiveResults:myPage.html:5:false Tests
+   > - Option if videos of test execution should be captured:    robot --listener LiveResults:myPage.html:5:true:true Tests
 
 ---
 
 Available Results:
 
- - LogListener.py --> Suite and Test status
-    > Uses ROBOT_LISTENER_API_VERSION = 3
+ - to be done..
 
 ---
 
