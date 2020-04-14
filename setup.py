@@ -13,7 +13,7 @@ with open(join(CURDIR, 'LiveResults.py'), encoding='utf-8') as f:
 
 setup(
     name="robotframework-liveresults",
-    version=__version__,
+    version=VERSION,
     author="xyz",
     author_email="xyz@dummyo.de",
     description="A listener for Live Results of Robot Framework execution.",
