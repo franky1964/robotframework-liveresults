@@ -20,7 +20,7 @@ setup(
     long_description="To be done",
     long_description_content_type="text/x-rst",
     url="https://github.com/franky1964/RF-LiveResults",
-    packages=find_packages(),
+    packages=['LiveResults']
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
