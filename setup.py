@@ -8,7 +8,7 @@ CURDIR = dirname(abspath(__file__))
 with open("README.rst", "r", encoding='utf-8') as fh:
     long_description = fh.read()
 
-with open(join(CURDIR, 'src', 'LiveResults', 'LiveResults.py'), encoding='utf-8') as f:
+with open(join(CURDIR, 'LiveResults', 'LiveResults.py'), encoding='utf-8') as f:
     VERSION = re.search("\n__version__ = '(.*)'", f.read()).group(1)
 
 setup(
@@ -20,8 +20,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/x-rst",
     url="https://github.com/franky1964/RF-LiveResults",
-    package_dir={'': 'src'},
-    packages=find_packages('src'),
+    packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
