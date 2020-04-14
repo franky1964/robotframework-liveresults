@@ -20,7 +20,8 @@ setup(
     long_description="To be done",
     long_description_content_type="text/x-rst",
     url="https://github.com/franky1964/robotframework-liveresults",
-    packages=['LiveResults'],
+    packages=find_packages(),
+    include_package_data=True,
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
