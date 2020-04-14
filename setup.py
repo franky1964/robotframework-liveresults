@@ -17,7 +17,7 @@ setup(
     author="xyz",
     author_email="xyz@dummyo.de",
     description="A listener for Live Results of Robot Framework execution.",
-    long_description=long_description,
+    long_description="To be done",
     long_description_content_type="text/x-rst",
     url="https://github.com/franky1964/RF-LiveResults",
     packages=find_packages(),
