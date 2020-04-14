@@ -37,4 +37,4 @@ setup(
     ],
     python_requires='>=3.6'
 )
-    © 2020 GitHub, Inc.
+
