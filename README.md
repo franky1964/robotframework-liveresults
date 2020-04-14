@@ -8,8 +8,8 @@ Steps to Use:
 
  - Step 1: Installation:
    > - Download or clone this repo
-       or Copy `LiveResults` folder to your project 
-       or use 'pip install git+https://github.com/franky1964/robotframework-liveresults.git'
+   >    or Copy `LiveResults` folder to your project 
+   >    or use 'pip install git+https://github.com/franky1964/robotframework-liveresults.git'
 
  - Step 2: Execute test case/suites using LiveResults Listener
    > - `robot --listener LiveResults Tests` 
