@@ -21,11 +21,11 @@ run:
 ``pip install --upgrade robotframework-liveresults``
 """
 	
-	
     ROBOT_LISTENER_API_VERSION = 3
  
-    def __init__(self, filename='RF_Live_Results.html', refresh=5, show=True):
+    def __init__(self, filename='RF_Live_Results.html', refresh=5, show=True, capture=True):
         self.ROBOT_PARENT_SUITE_SETUP_FAILED = 'Parent suite setup failed'
+        self.RF_LIVE_LOGGING_INITIAL_TITLE = 'Robot Framework Live Results (Initialize...)'
         self.RF_LIVE_LOGGING_RUNNING_TITLE = 'Robot Framework Live Results (Running...)'
         self.RF_LIVE_LOGGING_FINAL_TITLE = 'Robot Framework Live Results (Execution completed)'
         self.RF_LIVE_LOGGING_ICON_PATH = 'https://avatars2.githubusercontent.com/u/574284?s=200&v=4'
@@ -33,6 +33,7 @@ run:
         #self.liveLogFilepath filename = '\\\\SIDERIT\\LiveResults\\RF_Live_Results.html'
         self.liveLogFilepath = filename
         self.openBrowser = show
+        self.makeVideo = capture
         self.reportFile = None
         self.logFile = None
         self.expected = 0
@@ -43,6 +44,7 @@ run:
         self.refreshTimer = "http-equiv='refresh' content='" + str(refresh) +"'"
         self.refreshStopped = "http-equiv='refresh' content='5000'"
         self.content = ""
+        self.videoFilename = ""
         self.statusColors = {'yellow':'#FFFF66', 'green':'#32CD32', 'red':'#CD5C5C'}
         self.html_text = """
         <html>
@@ -54,6 +56,9 @@ run:
 		<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" type="text/javascript"></script>
 		<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js" type="text/javascript"></script>
 		<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js" type="text/javascript"></script>
+		<!--script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js" type="text/javascript"></script>
+		<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js" type="text/javascript"></script>
+		<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.colVis.min.js" type="text/javascript"></script-->
 		<script>$(document).ready(function() {$('#live').DataTable({"order": [[0, "desc"]],"lengthMenu": [[10,50,100, -1], [10,50,100, "All"]]});});</script>
 	</html>
 	<body>
@@ -111,6 +116,7 @@ run:
 			__content__        
         """
         self.html_text = self.html_text.replace ("__iconLink__", self.RF_LIVE_LOGGING_ICON_PATH)
+        _update_content(self, self.html_text, self.RF_LIVE_LOGGING_INITIAL_TITLE)
 
     def start_suite(self, suite, result):
         # count expected total testcases and open bowser only on top level
@@ -122,10 +128,21 @@ run:
             self.expected = suite.test_count
             _update_content(self, self.html_text, self.RF_LIVE_LOGGING_RUNNING_TITLE)
             if self.openBrowser: _open_liveLogs(self, self.liveLogFilepath)
+            if self.makeVideo:
+                BuiltIn().import_library('ScreenCapLibrary')
+                self.screencaplib = BuiltIn().get_library_instance('ScreenCapLibrary')
         self.test_count = len(suite.tests)
         if self.test_count != 0:
             self.suite_name = suite.name
             self.test_start_time = _get_current_date_time('%Y-%m-%d %H:%M:%S.%f',True)
+
+    def start_test(self, data, test):
+        if (self.makeVideo):
+            #self.test_case_name = ''.join([x.replace(' ', '_') for x in str(test)])
+            self.test_case_name = str(test)
+            self.screencaplib.start_video_recording(name=str(self.test_case_name))
+            self.videoFilename = os.path.join(pathlib.Path(self.reportFile).parent.absolute(), self.test_case_name + "_1.webm")
+            self.videoFilename = self.videoFilename.replace(' ', '%20')
 
     def end_test(self, data, test):
         if self.test_count != 0:
@@ -146,6 +163,8 @@ run:
                 statusColor = self.statusColors['yellow']
                 status = 'SKIP'
             statusLink = "<a href='file:///" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
+            criticalLink = str(test.critical)
+            if self.makeVideo: criticalLink = "<a href='file:///" + self.videoFilename + "' target='_blank'>" + criticalLink + "</a>"
             test_detail_message = """
 					<tr>
 						<td style="text-align: left;max-width: 70px;">%s</td>
@@ -157,9 +176,11 @@ run:
 						<td bgcolor='%s' style="text-align: center;">%s</td>
 						<td style="text-align: left;max-width: 250px;">%s</td>
 					</tr>
-            """ %(str(self.test_start_time), str(self.elapsed), str(self.suite_name), str(test), str(tags), str(test.critical), str(statusColor), str(statusLink), str(test.message))
+            """ %(str(self.test_start_time), str(self.elapsed), str(self.suite_name), str(test), str(tags), str(criticalLink), str(statusColor), str(statusLink), str(test.message))
             self.content += test_detail_message
             _update_content(self, self.html_text, self.RF_LIVE_LOGGING_RUNNING_TITLE)
+            if self.makeVideo:
+               self.screencaplib.stop_video_recording()
 
     def close(self):
         _update_content(self, self.html_text, self.RF_LIVE_LOGGING_FINAL_TITLE)
