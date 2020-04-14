@@ -13,7 +13,7 @@ CURDIR = dirname(abspath(__file__))
 
 setup(
     name="robotframework-liveresults",
-    version=VERSION,
+    version=__version__,
     author="xyz",
     author_email="xyz@dummyo.de",
     description="A listener for Live Results of Robot Framework execution.",
