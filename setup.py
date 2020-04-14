@@ -8,7 +8,7 @@ CURDIR = dirname(abspath(__file__))
 #with open("README.rst", "r", encoding='utf-8') as fh:
 #    long_description = fh.read()
 
-with open(join(CURDIR, 'LiveResults.py'), encoding='utf-8') as f:
+with open(join(CURDIR, 'LiveResults', 'LiveResults.py'), encoding='utf-8') as f:
     VERSION = re.search("\n__version__ = '(.*)'", f.read()).group(1)
 
 setup(
