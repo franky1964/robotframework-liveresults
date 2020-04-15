@@ -33,8 +33,7 @@ setup(
         "Framework :: Robot Framework",
     ],
     install_requires=[
-        'robotframework >= 3.1',
-        'robotframework-screencaplibrary'
+        'robotframework >= 3.1'
     ],
     python_requires='>=3.6'
 )
