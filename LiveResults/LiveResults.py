@@ -4,7 +4,7 @@ import webbrowser
 import pathlib
 from robot.libraries.BuiltIn import BuiltIn
 
-__version__ = '0.3.0'
+__version__ = '0.4.0'
 
 class LiveResults:
     """|
@@ -126,8 +126,12 @@ run:
             _update_content(self, self.html_text, self.RF_LIVE_LOGGING_RUNNING_TITLE)
             if self.openBrowser: _open_liveLogs(self, self.liveLogFilepath)
             if self.makeVideo:
+	      try:
                 BuiltIn().import_library('ScreenCapLibrary')
                 self.screencaplib = BuiltIn().get_library_instance('ScreenCapLibrary')
+              except:
+                self.makeVideo = False
+                BuiltIn().log('LiveResults: To get videos for test case executions please install the following library: <a href="https://github.com/mihaiparvu/ScreenCapLibrary">ScreenCapLibrary</a>','ERROR','HTML')
         self.test_count = len(suite.tests)
         if self.test_count != 0:
             self.suite_name = suite.name
