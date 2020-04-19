@@ -23,7 +23,7 @@ run:
 	
     ROBOT_LISTENER_API_VERSION = 3
  
-    def __init__(self, filename='RF_Live_Results.html', refresh=15, show=True, capture=True):
+    def __init__(self, filename='RF_Live_Results.html', refresh=15, show=True, capture=False):
         self.ROBOT_PARENT_SUITE_SETUP_FAILED = 'Parent suite setup failed'
         self.RF_LIVE_LOGGING_INITIAL_TITLE = 'Robot Framework Live Results (Initialize...)'
         self.RF_LIVE_LOGGING_RUNNING_TITLE = 'Robot Framework Live Results (Running...)'
