@@ -4,7 +4,7 @@ import webbrowser
 import pathlib
 from robot.libraries.BuiltIn import BuiltIn
 
-__version__ = '0.2.0'
+__version__ = '0.3.0'
 
 class LiveResults:
     """|
@@ -23,7 +23,7 @@ run:
 	
     ROBOT_LISTENER_API_VERSION = 3
  
-    def __init__(self, filename='RF_Live_Results.html', refresh=15, show=True, capture=False):
+    def __init__(self, show=True, capture=False, refresh=15, filename='RF_Live_Results.html'):
         self.ROBOT_PARENT_SUITE_SETUP_FAILED = 'Parent suite setup failed'
         self.RF_LIVE_LOGGING_INITIAL_TITLE = 'Robot Framework Live Results (Initialize...)'
         self.RF_LIVE_LOGGING_RUNNING_TITLE = 'Robot Framework Live Results (Running...)'
@@ -56,9 +56,6 @@ run:
 		<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" type="text/javascript"></script>
 		<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js" type="text/javascript"></script>
 		<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js" type="text/javascript"></script>
-		<!--script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js" type="text/javascript"></script>
-		<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js" type="text/javascript"></script>
-		<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.colVis.min.js" type="text/javascript"></script-->
 		<script>$(document).ready(function() {$('#live').DataTable({"order": [[0, "desc"]],"lengthMenu": [[10,50,100, -1], [10,50,100, "All"]]});});</script>
 	</html>
 	<body>
