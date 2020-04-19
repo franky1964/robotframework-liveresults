@@ -126,7 +126,7 @@ run:
             _update_content(self, self.html_text, self.RF_LIVE_LOGGING_RUNNING_TITLE)
             if self.openBrowser: _open_liveLogs(self, self.liveLogFilepath)
             if self.makeVideo:
-	      try:
+              try:
                 BuiltIn().import_library('ScreenCapLibrary')
                 self.screencaplib = BuiltIn().get_library_instance('ScreenCapLibrary')
               except:
