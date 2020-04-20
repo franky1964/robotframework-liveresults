@@ -15,17 +15,19 @@ Steps to Use:
    > - `robot --listener LiveResults Tests` 
 
  - Step 3 Options to be used:
-   > - Chnage default page name 'RF_Live_Results.html' by using: robot --listener LiveResults:myPage.html Tests
-   > - Default refresh time cn be changed by using:              robot --listener LiveResults:myPage.html:40 Tests
-   > - Option if browser is opened can be changed by using:      robot --listener LiveResults:myPage.html:5:false Tests
-   > - Option if videos of test execution should be captured:    robot --listener LiveResults:myPage.html:5:true:true Tests
+   > - Change the default value to not open the browser:         robot --listener LiveResults:False
+   > - Activate Option to capture videos of test execution:      robot --listener LiveResults:False:True
+   > - Change the filename of the generated HTML page:           robot --listener LiveResults:False:False:myPage.html
+   > - Change the timer value for autorefresh in HTML page:      robot --listener LiveResults:False:False:myPage.html:60
 
 ---
 
 Available Results:
-
- - to be done..
-
+ - The default name of the page is "RF_liveResults.html', it is located in the same directory as 'report.html' and 'log.html'
+ - The result "PASS" or "FAIL" contains a link to the detailed testcase log
+ - "SKIP" is set as testcase result if the Testsuite Setup was executed with an error 
+ - In case of captured vidoes the colum "Critical' contains a link to the captured video of the testcase execution 
+   (the following library has to be installed for this option: <a href="https://github.com/mihaiparvu/ScreenCapLibrary">ScreenCapLibrary</a>
 ---
 
 *Screenshot*
