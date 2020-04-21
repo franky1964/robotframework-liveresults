@@ -4,7 +4,7 @@ import webbrowser
 import pathlib
 from robot.libraries.BuiltIn import BuiltIn
 
-__version__ = '0.4.0'
+__version__ = '0.5.0'
 
 class LiveResults:
     """|
@@ -135,9 +135,9 @@ run:
         self.test_count = len(suite.tests)
         if self.test_count != 0:
             self.suite_name = suite.name
-            self.test_start_time = _get_current_date_time('%Y-%m-%d %H:%M:%S.%f',True)
 
     def start_test(self, data, test):
+        self.test_start_time = _get_current_date_time('%Y-%m-%d %H:%M:%S.%f',True)
         if (self.makeVideo):
             #self.test_case_name = ''.join([x.replace(' ', '_') for x in str(test)])
             self.test_case_name = str(test)
