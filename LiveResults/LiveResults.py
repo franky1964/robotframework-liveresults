@@ -4,7 +4,7 @@ import webbrowser
 import pathlib
 from robot.libraries.BuiltIn import BuiltIn
 
-__version__ = '0.5.0'
+__version__ = '0.8.0'
 
 class LiveResults:
     """|
@@ -16,21 +16,24 @@ Live Results ...
 |
 Installation
 ------------
-If you already have Python >= 3.6 with pip installed, you can simply
+If you already have Python >= 3.6 with pip and git installed, you can simply
 run:
-``pip install --upgrade robotframework-liveresults``
+``pip install --upgrade git+https://github.com/franky1964/robotframework-liveresults.git``
 """
 	
     ROBOT_LISTENER_API_VERSION = 3
  
-    def __init__(self, show=True, capture=False, refresh=15, filename='RF_Live_Results.html'):
+    def __init__(self, show=False, capture=False, refresh=15, filename='RF_Live_Results.html'):
+        print ("Parameter 'show' ist set to : " + str(show))
+        print ("Parameter 'capture' ist set to : " + str(capture))
+        print ("Parameter 'filename' ist set to : " + filename)
+        print ("Parameter 'refresh' ist set to : " + str(refresh))
         self.ROBOT_PARENT_SUITE_SETUP_FAILED = 'Parent suite setup failed'
         self.RF_LIVE_LOGGING_INITIAL_TITLE = 'Robot Framework Live Results (Initialize...)'
         self.RF_LIVE_LOGGING_RUNNING_TITLE = 'Robot Framework Live Results (Running...)'
         self.RF_LIVE_LOGGING_FINAL_TITLE = 'Robot Framework Live Results (Execution completed)'
         self.RF_LIVE_LOGGING_ICON_PATH = 'https://avatars2.githubusercontent.com/u/574284?s=200&v=4'
         self.PRE_RUNNER = 0
-        #self.liveLogFilepath filename = '\\\\SIDERIT\\LiveResults\\RF_Live_Results.html'
         self.liveLogFilepath = filename
         self.openBrowser = show
         self.makeVideo = capture
@@ -45,6 +48,7 @@ run:
         self.refreshStopped = "http-equiv='refresh' content='5000'"
         self.content = ""
         self.videoFilename = ""
+        self.videoPath= ""
         self.statusColors = {'yellow':'#FFFF66', 'green':'#32CD32', 'red':'#CD5C5C'}
         self.html_text = """
         <html>
@@ -122,8 +126,9 @@ run:
             self.logFile = BuiltIn().get_variable_value("${LOG FILE}")
             self.reportFile = BuiltIn().get_variable_value("${REPORT FILE}")
             self.liveLogFilepath = os.path.join(pathlib.Path(self.reportFile).parent.absolute(), self.liveLogFilepath)
-            self.logFile = self.logFile.replace(' ', '%20')
-            self.reportFile = self.reportFile.replace(' ', '%20')
+            self.videoPath = os.path.join(pathlib.Path(self.reportFile).parent.absolute(), "Videos")
+            self.logFile = os.path.basename(self.logFile)
+            self.reportFile = os.path.basename(self.reportFile)
             self.expected = suite.test_count
             _update_content(self, self.html_text, self.RF_LIVE_LOGGING_RUNNING_TITLE)
             if self.openBrowser: _open_liveLogs(self, self.liveLogFilepath)
@@ -131,6 +136,9 @@ run:
               try:
                 BuiltIn().import_library('ScreenCapLibrary')
                 self.screencaplib = BuiltIn().get_library_instance('ScreenCapLibrary')
+                print ("Videos will be saved in : " + self.videoPath)
+                if not os.path.exists(self.videoPath):
+                  os.makedirs(self.videoPath)
               except:
                 self.makeVideo = False
                 BuiltIn().log('LiveResults: To get videos for test case executions please install the following library: <a href="https://github.com/mihaiparvu/ScreenCapLibrary">ScreenCapLibrary</a>','ERROR','HTML')
@@ -143,9 +151,10 @@ run:
         if (self.makeVideo):
             #self.test_case_name = ''.join([x.replace(' ', '_') for x in str(test)])
             self.test_case_name = str(test)
+            self.screencaplib.set_screenshot_directory(self.videoPath)
             self.screencaplib.start_video_recording(name=str(self.test_case_name))
-            self.videoFilename = os.path.join(pathlib.Path(self.reportFile).parent.absolute(), self.test_case_name + "_1.webm")
-            self.videoFilename = self.videoFilename.replace(' ', '%20')
+            self.videoFilename = os.path.join("Videos", self.test_case_name + "_1.webm")
+            #self.videoFilename = self.videoFilename.replace(' ', '%20')
 
     def end_test(self, data, test):
         if self.test_count != 0:
@@ -165,9 +174,11 @@ run:
                 self.skipped = self.skipped + 1
                 statusColor = self.statusColors['yellow']
                 status = 'SKIP'
-            statusLink = "<a href='file:///" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
+            #statusLink = "<a href='file:///" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
+            statusLink = "<a href='" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
             criticalLink = str(test.critical)
-            if self.makeVideo: criticalLink = "<a href='file:///" + self.videoFilename + "' target='_blank'>" + criticalLink + "</a>"
+            #if self.makeVideo: criticalLink = "<a href='file:///" + self.videoFilename + "' target='_blank'>" + criticalLink + "</a>"
+            if self.makeVideo: criticalLink = "<a href='" + self.videoFilename + "' target='_blank'>" + criticalLink + "</a>"
             test_detail_message = """
 					<tr>
 						<td style="text-align: left;max-width: 70px;">%s</td>
@@ -202,7 +213,7 @@ def _update_content(self, content, title):
           updated_content = content.replace("__title__", title)
           if title == self.RF_LIVE_LOGGING_FINAL_TITLE:
             updated_content = updated_content.replace(self.refreshTimer, self.refreshStopped)
-            updated_content = _add_result_links(self, updated_content, "file:///" + self.logFile, "file:///" + self.reportFile)
+            updated_content = _add_result_links(self, updated_content, self.logFile, self.reportFile)
           updated_content = updated_content.replace("__expected__",str(self.expected))
           updated_content = updated_content.replace("__executed__",str(self.executed))
           updated_content = updated_content.replace("__passed__",str(self.passed))
@@ -216,8 +227,10 @@ def _add_result_links(self, content, logFile, reportFile):
         #switch if new pages should be opened
         #add_link_ReportFile = """<a href=""" + reportFile.replace(' ', '%20') + """ target='_blank'>Report</a>"""
         #add_link_LogFile = """<a href=""" + logFile.replace(' ', '%20') + """ target='_blank'>Log</a>"""
-        add_link_ReportFile = "<a href='" + reportFile.replace(' ', '%20') + "'>Report</a>"
-        add_link_LogFile = "<a href='" + logFile.replace(' ', '%20') + "'>Log</a>"
+        add_link_ReportFile = "<a href='" + self.reportFile + "'>Report</a>"
+        add_link_LogFile = "<a href='" + self.logFile + "'>Log</a>"
+        print ("Link to Log file: " + add_link_LogFile)
+        print ("Link to Report file: " + add_link_ReportFile)
         updated_content = content.replace("__logFile__", add_link_LogFile)
         updated_content = updated_content.replace("__reportFile__", add_link_ReportFile)
         return updated_content;
