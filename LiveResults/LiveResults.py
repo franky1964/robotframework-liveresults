@@ -179,7 +179,7 @@ run:
                 statusColor = self.statusColors['yellow']
                 status = 'SKIP'
             #statusLink = "<a href='file:///" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
-            statusLink = "<a href='" + self.logFile + "#" + test.id + "'>" + status + "</a>"
+            statusLink = "<a href='" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
             criticalLink = str(test.critical)
             #if self.makeVideo: criticalLink = "<a href='file:///" + self.videoFilename + "' target='_blank'>" + criticalLink + "</a>"
             if self.makeVideo: criticalLink = "<a href='" + self.videoFilename + "' target='_blank'>" + criticalLink + "</a>"
