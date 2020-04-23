@@ -23,7 +23,7 @@ Steps to Use:
 ---
 
 Available Results:
- - The default name of the page is "RF_liveResults.html', it is located in the same directory as 'report.html' and 'log.html'
+ - The default name of the page is "RF_LiveResults.html', it is located in the same directory as 'report.html' and 'log.html'
  - The result "PASS" or "FAIL" contains a link to the detailed testcase log
  - "SKIP" is set as testcase result if the Testsuite Setup was executed with an error 
  - In case of captured videos the column "Critical' contains a link to the captured video of the testcase execution 
