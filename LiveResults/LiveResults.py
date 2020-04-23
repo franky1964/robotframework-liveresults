@@ -36,8 +36,8 @@ run:
         self.RF_LIVE_LOGGING_ICON_PATH = 'https://avatars2.githubusercontent.com/u/574284?s=200&v=4'
         self.PRE_RUNNER = 0
         self.liveLogFilepath = filename
-        self.openBrowser = strtobool(show)
-        self.makeVideo = strtobool(capture)
+        self.openBrowser = show
+        self.makeVideo = capture
         self.reportFile = None
         self.logFile = None
         self.expected = 0
@@ -51,6 +51,7 @@ run:
         self.videoFilename = ""
         self.videoPath= ""
         self.statusColors = {'yellow':'#FFFF66', 'green':'#32CD32', 'red':'#CD5C5C'}
+        self.videoFoldername = "Video"
         self.html_text = """
         <html>
 	<title>Robot Framework Live Results</title>
@@ -127,7 +128,7 @@ run:
             self.logFile = BuiltIn().get_variable_value("${LOG FILE}")
             self.reportFile = BuiltIn().get_variable_value("${REPORT FILE}")
             self.liveLogFilepath = os.path.join(pathlib.Path(self.reportFile).parent.absolute(), self.liveLogFilepath)
-            self.videoPath = os.path.join(pathlib.Path(self.reportFile).parent.absolute(), "Videos")
+            self.videoPath = os.path.join(pathlib.Path(self.reportFile).parent.absolute(), self.videoFoldername)
             self.logFile = os.path.basename(self.logFile)
             self.reportFile = os.path.basename(self.reportFile)
             self.expected = suite.test_count
@@ -178,7 +179,7 @@ run:
                 statusColor = self.statusColors['yellow']
                 status = 'SKIP'
             #statusLink = "<a href='file:///" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
-            statusLink = "<a href='" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
+            statusLink = "<a href='" + self.logFile + "#" + test.id + "'>" + status + "</a>"
             criticalLink = str(test.critical)
             #if self.makeVideo: criticalLink = "<a href='file:///" + self.videoFilename + "' target='_blank'>" + criticalLink + "</a>"
             if self.makeVideo: criticalLink = "<a href='" + self.videoFilename + "' target='_blank'>" + criticalLink + "</a>"
