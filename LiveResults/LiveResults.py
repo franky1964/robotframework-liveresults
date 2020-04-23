@@ -2,6 +2,7 @@ import os
 import datetime
 import webbrowser
 import pathlib
+from distutils.util import strtobool
 from robot.libraries.BuiltIn import BuiltIn
 
 __version__ = '0.8.0'
@@ -35,8 +36,8 @@ run:
         self.RF_LIVE_LOGGING_ICON_PATH = 'https://avatars2.githubusercontent.com/u/574284?s=200&v=4'
         self.PRE_RUNNER = 0
         self.liveLogFilepath = filename
-        self.openBrowser = show
-        self.makeVideo = capture
+        self.openBrowser = strtobool(show)
+        self.makeVideo = strtobool(capture)
         self.reportFile = None
         self.logFile = None
         self.expected = 0
