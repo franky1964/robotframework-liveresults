@@ -131,7 +131,9 @@ run:
             self.reportFile = os.path.basename(self.reportFile)
             self.expected = suite.test_count
             _update_content(self, self.html_text, self.RF_LIVE_LOGGING_RUNNING_TITLE)
-            if self.openBrowser: _open_liveLogs(self, self.liveLogFilepath)
+            if self.openBrowser:
+              print ("Browser is opened with page: " + self.liveLogFilepath)
+              _open_liveLogs(self, self.liveLogFilepath)
             if self.makeVideo:
               try:
                 BuiltIn().import_library('ScreenCapLibrary')
