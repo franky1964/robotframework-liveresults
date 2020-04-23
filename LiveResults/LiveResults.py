@@ -5,7 +5,7 @@ import pathlib
 from distutils.util import strtobool
 from robot.libraries.BuiltIn import BuiltIn
 
-__version__ = '0.8.0'
+__version__ = '0.9.0'
 
 class LiveResults:
     """|
@@ -51,7 +51,7 @@ run:
         self.videoFilename = ""
         self.videoPath= ""
         self.statusColors = {'yellow':'#FFFF66', 'green':'#32CD32', 'red':'#CD5C5C'}
-        self.videoFoldername = "Video"
+        self.videoFoldername = "Videos"
         self.html_text = """
         <html>
 	<title>Robot Framework Live Results</title>
@@ -157,7 +157,7 @@ run:
             self.test_case_name = str(test)
             self.screencaplib.set_screenshot_directory(self.videoPath)
             self.screencaplib.start_video_recording(name=str(self.test_case_name))
-            self.videoFilename = os.path.join("Videos", self.test_case_name + "_1.webm")
+            self.videoFilename = os.path.join(self.videoFoldername, self.test_case_name + "_1.webm")
             #self.videoFilename = self.videoFilename.replace(' ', '%20')
 
     def end_test(self, data, test):
