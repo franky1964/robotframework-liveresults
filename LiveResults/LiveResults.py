@@ -233,8 +233,8 @@ def _add_result_links(self, content, logFile, reportFile):
         #add_link_LogFile = """<a href=""" + logFile.replace(' ', '%20') + """ target='_blank'>Log</a>"""
         add_link_ReportFile = "<a href='" + self.reportFile + "'>Report</a>"
         add_link_LogFile = "<a href='" + self.logFile + "'>Log</a>"
-        print ("Link to Log file: " + add_link_LogFile)
-        print ("Link to Report file: " + add_link_ReportFile)
+        #print ("Link to Log file: " + add_link_LogFile)
+        #print ("Link to Report file: " + add_link_ReportFile)
         updated_content = content.replace("__logFile__", add_link_LogFile)
         updated_content = updated_content.replace("__reportFile__", add_link_ReportFile)
         return updated_content;
