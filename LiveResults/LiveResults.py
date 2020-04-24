@@ -36,8 +36,8 @@ run:
         self.RF_LIVE_LOGGING_ICON_PATH = 'https://avatars2.githubusercontent.com/u/574284?s=200&v=4'
         self.PRE_RUNNER = 0
         self.liveLogFilepath = filename
-        self.openBrowser = show
-        self.makeVideo = capture
+        self.openBrowser = bool(strtobool(show))
+        self.makeVideo = bool(strtobool(capture))
         self.reportFile = None
         self.logFile = None
         self.expected = 0
