@@ -24,7 +24,7 @@ run:
 	
     ROBOT_LISTENER_API_VERSION = 3
  
-    def __init__(self, show=False, capture=False, refresh=15, filename='RF_Live_Results.html'):
+    def __init__(self, show='False', capture='False', refresh=15, filename='RF_Live_Results.html'):
         print ("Parameter 'show' ist set to : " + str(show))
         print ("Parameter 'capture' ist set to : " + str(capture))
         print ("Parameter 'filename' ist set to : " + filename)
@@ -134,7 +134,7 @@ run:
             self.expected = suite.test_count
             _update_content(self, self.html_text, self.RF_LIVE_LOGGING_RUNNING_TITLE)
             if self.openBrowser:
-              print ("Browser is opened with page: " + self.liveLogFilepath)
+              print ("Default browser is opened with page: " + self.liveLogFilepath)
               _open_liveLogs(self, self.liveLogFilepath)
             if self.makeVideo:
               try:
@@ -182,7 +182,9 @@ run:
             statusLink = "<a href='" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
             criticalLink = str(test.critical)
             #if self.makeVideo: criticalLink = "<a href='file:///" + self.videoFilename + "' target='_blank'>" + criticalLink + "</a>"
-            if self.makeVideo: criticalLink = "<a href='" + self.videoFilename + "' target='_blank'>" + criticalLink + "</a>"
+            if self.makeVideo:
+               criticalLink = "<a href='" + self.videoFilename + "' target='_blank'>" + criticalLink + "</a>"
+               self.screencaplib.stop_video_recording()
             test_detail_message = """
 					<tr>
 						<td style="text-align: left;max-width: 70px;">%s</td>
@@ -197,8 +199,6 @@ run:
             """ %(str(self.test_start_time), str(self.elapsed), str(self.suite_name), str(test), str(tags), str(criticalLink), str(statusColor), str(statusLink), str(test.message))
             self.content += test_detail_message
             _update_content(self, self.html_text, self.RF_LIVE_LOGGING_RUNNING_TITLE)
-            if self.makeVideo:
-               self.screencaplib.stop_video_recording()
 
     def close(self):
         _update_content(self, self.html_text, self.RF_LIVE_LOGGING_FINAL_TITLE)
@@ -213,31 +213,31 @@ def _get_current_date_time(format,trim):
         return t.strftime(format)
 
 def _update_content(self, content, title):
-          self.liveLogsFile = open(self.liveLogFilepath,'w')
-          updated_content = content.replace("__title__", title)
-          if title == self.RF_LIVE_LOGGING_FINAL_TITLE:
-            updated_content = updated_content.replace(self.refreshTimer, self.refreshStopped)
-            updated_content = _add_result_links(self, updated_content, self.logFile, self.reportFile)
-          updated_content = updated_content.replace("__expected__",str(self.expected))
-          updated_content = updated_content.replace("__executed__",str(self.executed))
-          updated_content = updated_content.replace("__passed__",str(self.passed))
-          updated_content = updated_content.replace("__skipped__",str(self.skipped))
-          updated_content = updated_content.replace("__failed__",str(self.failed))
-          updated_content = updated_content.replace("__content__",str(self.content))
-          self.liveLogsFile.write(updated_content)
-          self.liveLogsFile.close()
+    self.liveLogsFile = open(self.liveLogFilepath,'w')
+    updated_content = content.replace("__title__", title)
+    if title == self.RF_LIVE_LOGGING_FINAL_TITLE:
+        updated_content = updated_content.replace(self.refreshTimer, self.refreshStopped)
+        updated_content = _add_result_links(self, updated_content, self.logFile, self.reportFile)
+    updated_content = updated_content.replace("__expected__",str(self.expected))
+    updated_content = updated_content.replace("__executed__",str(self.executed))
+    updated_content = updated_content.replace("__passed__",str(self.passed))
+    updated_content = updated_content.replace("__skipped__",str(self.skipped))
+    updated_content = updated_content.replace("__failed__",str(self.failed))
+    updated_content = updated_content.replace("__content__",str(self.content))
+    self.liveLogsFile.write(updated_content)
+    self.liveLogsFile.close()
 
 def _add_result_links(self, content, logFile, reportFile):
-        #switch if new pages should be opened
-        #add_link_ReportFile = """<a href=""" + reportFile.replace(' ', '%20') + """ target='_blank'>Report</a>"""
-        #add_link_LogFile = """<a href=""" + logFile.replace(' ', '%20') + """ target='_blank'>Log</a>"""
-        add_link_ReportFile = "<a href='" + self.reportFile + "'>Report</a>"
-        add_link_LogFile = "<a href='" + self.logFile + "'>Log</a>"
-        #print ("Link to Log file: " + add_link_LogFile)
-        #print ("Link to Report file: " + add_link_ReportFile)
-        updated_content = content.replace("__logFile__", add_link_LogFile)
-        updated_content = updated_content.replace("__reportFile__", add_link_ReportFile)
-        return updated_content;
+    #switch if new pages should be opened
+    #add_link_ReportFile = """<a href=""" + reportFile.replace(' ', '%20') + """ target='_blank'>Report</a>"""
+    #add_link_LogFile = """<a href=""" + logFile.replace(' ', '%20') + """ target='_blank'>Log</a>"""
+    add_link_ReportFile = "<a href='" + self.reportFile + "'>Report</a>"
+    add_link_LogFile = "<a href='" + self.logFile + "'>Log</a>"
+    #print ("Link to Log file: " + add_link_LogFile)
+    #print ("Link to Report file: " + add_link_ReportFile)
+    updated_content = content.replace("__logFile__", add_link_LogFile)
+    updated_content = updated_content.replace("__reportFile__", add_link_ReportFile)
+    return updated_content;
  
 def _open_liveLogs(self, filepath):
-        webbrowser.open_new_tab(filepath)
+    webbrowser.open_new_tab(filepath)
