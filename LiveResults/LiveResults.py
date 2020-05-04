@@ -5,7 +5,7 @@ import pathlib
 from distutils.util import strtobool
 from robot.libraries.BuiltIn import BuiltIn
 
-__version__ = '0.9.0'
+__version__ = '1.0'
 
 class LiveResults:
     """|
@@ -25,10 +25,10 @@ run:
     ROBOT_LISTENER_API_VERSION = 3
  
     def __init__(self, show='False', capture='False', refresh=15, filename='RF_Live_Results.html'):
-        print ("Parameter 'show' ist set to : " + str(show))
-        print ("Parameter 'capture' ist set to : " + str(capture))
-        print ("Parameter 'filename' ist set to : " + filename)
-        print ("Parameter 'refresh' ist set to : " + str(refresh))
+        print ("LiveResults - Parameter 'show' ist set to: " + str(show))
+        print ("LiveResults - Parameter 'capture' ist set to: " + str(capture))
+        print ("LiveResults - Parameter 'filename' ist set to: " + filename)
+        print ("LiveResults - Parameter 'refresh' ist set to: " + str(refresh))
         self.ROBOT_PARENT_SUITE_SETUP_FAILED = 'Parent suite setup failed'
         self.RF_LIVE_LOGGING_INITIAL_TITLE = 'Robot Framework Live Results (Initialize...)'
         self.RF_LIVE_LOGGING_RUNNING_TITLE = 'Robot Framework Live Results (Running...)'
@@ -36,8 +36,8 @@ run:
         self.RF_LIVE_LOGGING_ICON_PATH = 'https://avatars2.githubusercontent.com/u/574284?s=200&v=4'
         self.PRE_RUNNER = 0
         self.liveLogFilepath = filename
-        self.openBrowser = bool(strtobool(show))
-        self.makeVideo = bool(strtobool(capture))
+        self.openBrowser = strtobool(show)
+        self.makeVideo = strtobool(capture)
         self.reportFile = None
         self.logFile = None
         self.expected = 0
@@ -45,7 +45,7 @@ run:
         self.skipped = 0
         self.passed = 0
         self.failed = 0
-        self.refreshTimer = "http-equiv='refresh' content='" + str(refresh) +"'"
+        self.refreshTimer = "http-equiv='refresh' content='" + str(refresh) + "'"
         self.refreshStopped = "http-equiv='refresh' content='5000'"
         self.content = ""
         self.videoFilename = ""
@@ -134,13 +134,13 @@ run:
             self.expected = suite.test_count
             _update_content(self, self.html_text, self.RF_LIVE_LOGGING_RUNNING_TITLE)
             if self.openBrowser:
-              print ("Default browser is opened with page: " + self.liveLogFilepath)
+              print ("LiveResults - Default browser is opened with page: " + self.liveLogFilepath)
               _open_liveLogs(self, self.liveLogFilepath)
             if self.makeVideo:
               try:
                 BuiltIn().import_library('ScreenCapLibrary')
                 self.screencaplib = BuiltIn().get_library_instance('ScreenCapLibrary')
-                print ("Videos will be saved in : " + self.videoPath)
+                print ("LiveResults - Videos will be saved in : " + self.videoPath)
                 if not os.path.exists(self.videoPath):
                   os.makedirs(self.videoPath)
               except:
@@ -153,7 +153,6 @@ run:
     def start_test(self, data, test):
         self.test_start_time = _get_current_date_time('%Y-%m-%d %H:%M:%S.%f',True)
         if (self.makeVideo):
-            #self.test_case_name = ''.join([x.replace(' ', '_') for x in str(test)])
             self.test_case_name = str(test)
             self.screencaplib.set_screenshot_directory(self.videoPath)
             self.screencaplib.start_video_recording(name=str(self.test_case_name))
@@ -228,13 +227,13 @@ def _update_content(self, content, title):
     self.liveLogsFile.close()
 
 def _add_result_links(self, content, logFile, reportFile):
-    #switch if new pages should be opened
+    #change if new pages should be opened
     #add_link_ReportFile = """<a href=""" + reportFile.replace(' ', '%20') + """ target='_blank'>Report</a>"""
     #add_link_LogFile = """<a href=""" + logFile.replace(' ', '%20') + """ target='_blank'>Log</a>"""
     add_link_ReportFile = "<a href='" + self.reportFile + "'>Report</a>"
     add_link_LogFile = "<a href='" + self.logFile + "'>Log</a>"
-    #print ("Link to Log file: " + add_link_LogFile)
-    #print ("Link to Report file: " + add_link_ReportFile)
+    print ("LiveResults - Link to Log file: " + add_link_LogFile)
+    print ("LiveResults - Link to Report file: " + add_link_ReportFile)
     updated_content = content.replace("__logFile__", add_link_LogFile)
     updated_content = updated_content.replace("__reportFile__", add_link_ReportFile)
     return updated_content;
