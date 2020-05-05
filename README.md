@@ -27,7 +27,7 @@ Available Results:
  - The result "PASS" or "FAIL" contains a link to the detailed testcase log
  - "SKIP" is set as testcase result if the Testsuite Setup was executed with an error 
  - In case of captured videos the column "Critical' contains a link to the captured video of the testcase execution 
-   (the following library has to be installed for this option: <a href="https://github.com/mihaiparvu/ScreenCapLibrary">ScreenCapLibrary</a>
+   (the following library has to be installed for this option: <a href="https://github.com/mihaiparvu/ScreenCapLibrary">ScreenCapLibrary</a>)
 ---
 
 *Screenshot*
