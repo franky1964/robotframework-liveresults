@@ -23,6 +23,8 @@ run:
 """
 	
     ROBOT_LISTENER_API_VERSION = 3
+#https://stackoverflow.com/questions/28435865/can-i-stop-a-meta-refresh-using-javascript
+
  
     def __init__(self, show='False', capture='False', refresh=15, filename='RF_Live_Results.html'):
         print ("LiveResults - Parameter 'show' ist set to: " + str(show))
@@ -43,6 +45,7 @@ run:
         self.expected = 0
         self.executed = 0
         self.skipped = 0
+        self.blocked = 0
         self.passed = 0
         self.failed = 0
         self.refreshTimer = "http-equiv='refresh' content='" + str(refresh) + "'"
@@ -50,7 +53,7 @@ run:
         self.content = ""
         self.videoFilename = ""
         self.videoPath= ""
-        self.statusColors = {'yellow':'#FFFF66', 'green':'#32CD32', 'red':'#CD5C5C'}
+        self.statusColors = {'yellow':'#FFFF66', 'green':'#32CD32', 'red':'#CD5C5C', 'blue':'#87CEFA'}
         self.videoFoldername = "Videos"
         self.html_text = """
         <html>
@@ -86,6 +89,7 @@ run:
 					<th>Tests to be executed:</th>
 					<th>Test already executed:</th>
 					<th>Tests Skipped:</th>
+					<th>Tests Blocked:</th>
 					<th>Tests Passed:</th>
 					<th>Tests Failed:</th>
 				</tr>
@@ -96,7 +100,8 @@ run:
 					<td><b>__reportFile__</b></td>
 					<td><b>__expected__</b></td>
 					<td><b>__executed__</b></td>
-					<td bgcolor='""" + self.statusColors['yellow'] + """'><b>__skipped__</b></td>
+					<td bgcolor='""" + self.statusColors['blue'] + """'><b>__skipped__</b></td>
+					<td bgcolor='""" + self.statusColors['yellow'] + """'><b>__blocked__</b></td>
 					<td bgcolor='""" + self.statusColors['green'] + """'><b>__passed__</b></td>
 					<td bgcolor='""" + self.statusColors['red'] + """'><b>__failed__</b></td>
 				</tr>
@@ -174,9 +179,9 @@ run:
                 statusColor = self.statusColors['red']
             if test.message.startswith(self.ROBOT_PARENT_SUITE_SETUP_FAILED):
                 self.failed = self.failed - 1
-                self.skipped = self.skipped + 1
+                self.blocked = self.blocked + 1
                 statusColor = self.statusColors['yellow']
-                status = 'SKIP'
+                status = 'BLOCKED'
             #statusLink = "<a href='file:///" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
             statusLink = "<a href='" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
             criticalLink = str(test.critical)
@@ -221,6 +226,7 @@ def _update_content(self, content, title):
     updated_content = updated_content.replace("__executed__",str(self.executed))
     updated_content = updated_content.replace("__passed__",str(self.passed))
     updated_content = updated_content.replace("__skipped__",str(self.skipped))
+    updated_content = updated_content.replace("__blocked__",str(self.blocked))
     updated_content = updated_content.replace("__failed__",str(self.failed))
     updated_content = updated_content.replace("__content__",str(self.content))
     self.liveLogsFile.write(updated_content)
