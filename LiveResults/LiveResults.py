@@ -26,7 +26,7 @@ run:
 #https://stackoverflow.com/questions/28435865/can-i-stop-a-meta-refresh-using-javascript
 
  
-    def __init__(self, show='False', capture='False', refresh=5, filename='RF_Live_Results.html'):
+    def __init__(self, show='False', capture='False', refresh=15, filename='RF_Live_Results.html'):
         print ("LiveResults - Parameter 'show' ist set to: " + str(show))
         print ("LiveResults - Parameter 'capture' ist set to: " + str(capture))
         print ("LiveResults - Parameter 'filename' ist set to: " + filename)
