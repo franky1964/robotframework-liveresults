@@ -5,7 +5,7 @@ import pathlib
 from distutils.util import strtobool
 from robot.libraries.BuiltIn import BuiltIn
 
-__version__ = '1.0'
+__version__ = '2.0'
 
 class LiveResults:
     """|
@@ -26,7 +26,7 @@ run:
 #https://stackoverflow.com/questions/28435865/can-i-stop-a-meta-refresh-using-javascript
 
  
-    def __init__(self, show='False', capture='False', refresh=15, filename='RF_Live_Results.html'):
+    def __init__(self, show='False', capture='False', refresh=5, filename='RF_Live_Results.html'):
         print ("LiveResults - Parameter 'show' ist set to: " + str(show))
         print ("LiveResults - Parameter 'capture' ist set to: " + str(capture))
         print ("LiveResults - Parameter 'filename' ist set to: " + filename)
@@ -35,7 +35,8 @@ run:
         self.RF_LIVE_LOGGING_INITIAL_TITLE = 'Robot Framework Live Results (Initialize...)'
         self.RF_LIVE_LOGGING_RUNNING_TITLE = 'Robot Framework Live Results (Running...)'
         self.RF_LIVE_LOGGING_FINAL_TITLE = 'Robot Framework Live Results (Execution completed)'
-        self.RF_LIVE_LOGGING_ICON_PATH = 'https://avatars2.githubusercontent.com/u/574284?s=200&v=4'
+        self.RF_LIVE_LOGGING_ICON_PATH_1 = 'https://avatars2.githubusercontent.com/u/574284?s=200&v=4'
+        self.RF_LIVE_LOGGING_ICON_PATH_2 = 'http://www.imbus.de/fileadmin/Resources/Public/Images/social.png'
         self.PRE_RUNNER = 0
         self.liveLogFilepath = filename
         self.openBrowser = strtobool(show)
@@ -66,6 +67,7 @@ run:
 		<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js" type="text/javascript"></script>
 		<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js" type="text/javascript"></script>
 		<script>$(document).ready(function() {$('#live').DataTable({"order": [[0, "desc"]],"lengthMenu": [[10,50,100, -1], [10,50,100, "All"]]});});</script>
+		<script type="text/javascript">function pauseshow(){window.stop();}</script>
 	</html>
 	<body>
 		<table align="center" style="table-layout: fixed ;">
@@ -73,12 +75,18 @@ run:
 				<button class="btn" value="Refresh Page" onClick="window.location.href=window.location.href">Reload Page</button>
 			</td>
 			<td>
-				<a><img src="__iconLink__" style="height:10vh;max-width:98%;"></a> 
+				<a><img src="__iconLink1__" style="height:10vh;max-width:98%;"></a> 
 			</td>
 			<td>
 				<h3 style="color:#009688;" style="text-align: center;">
 					<b>__title__</b>
 				</h3>
+			</td>
+			<td>
+				<button class="btn" value="Stop Refresh" onclick="pauseshow()">Stop Refresh</button>
+			</td>
+			<td>
+				<a><img src="__iconLink2__" style="height:10vh;max-width:98%;"></a> 
 			</td>
 		</table>
 		<table class="table table-bordered"
@@ -123,7 +131,8 @@ run:
 			<tbody>
 			__content__        
         """
-        self.html_text = self.html_text.replace ("__iconLink__", self.RF_LIVE_LOGGING_ICON_PATH)
+        self.html_text = self.html_text.replace ("__iconLink1__", self.RF_LIVE_LOGGING_ICON_PATH_1)
+        self.html_text = self.html_text.replace ("__iconLink2__", self.RF_LIVE_LOGGING_ICON_PATH_2)
         _update_content(self, self.html_text, self.RF_LIVE_LOGGING_INITIAL_TITLE)
 
     def start_suite(self, suite, result):
