@@ -23,6 +23,8 @@ run:
 """
 	
     ROBOT_LISTENER_API_VERSION = 3
+#https://stackoverflow.com/questions/28435865/can-i-stop-a-meta-refresh-using-javascript
+
  
     def __init__(self, show='False', capture='False', refresh=15, filename='RF_Live_Results.html'):
         print ("LiveResults - Parameter 'show' ist set to: " + str(show))
@@ -33,7 +35,8 @@ run:
         self.RF_LIVE_LOGGING_INITIAL_TITLE = 'Robot Framework Live Results (Initialize...)'
         self.RF_LIVE_LOGGING_RUNNING_TITLE = 'Robot Framework Live Results (Running...)'
         self.RF_LIVE_LOGGING_FINAL_TITLE = 'Robot Framework Live Results (Execution completed)'
-        self.RF_LIVE_LOGGING_ICON_PATH = 'https://avatars2.githubusercontent.com/u/574284?s=200&v=4'
+        self.RF_LIVE_LOGGING_ICON_PATH_1 = 'https://avatars2.githubusercontent.com/u/574284?s=200&v=4'
+        self.RF_LIVE_LOGGING_ICON_PATH_2 = 'http://www.imbus.de/fileadmin/Resources/Public/Images/social.png'
         self.PRE_RUNNER = 0
         self.liveLogFilepath = filename
         self.openBrowser = strtobool(show)
@@ -43,15 +46,18 @@ run:
         self.expected = 0
         self.executed = 0
         self.skipped = 0
+        self.blocked = 0
         self.passed = 0
         self.failed = 0
+        self.refresh = refresh
         self.refreshTimer = "http-equiv='refresh' content='" + str(refresh) + "'"
         self.refreshStopped = "http-equiv='refresh' content='5000'"
         self.content = ""
         self.videoFilename = ""
         self.videoPath= ""
-        self.statusColors = {'yellow':'#FFFF66', 'green':'#32CD32', 'red':'#CD5C5C'}
+        self.statusColors = {'yellow':'#FFFF66', 'green':'#32CD32', 'red':'#CD5C5C', 'blue':'#87CEFA'}
         self.videoFoldername = "Videos"
+        self.buttonStopRefresh = "<button class='btn' value= 'Stop Reload' onclick= 'pauseshow()'>Stop Refresh</button>"
         self.html_text = """
         <html>
 	<title>Robot Framework Live Results</title>
@@ -63,6 +69,7 @@ run:
 		<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js" type="text/javascript"></script>
 		<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js" type="text/javascript"></script>
 		<script>$(document).ready(function() {$('#live').DataTable({"order": [[0, "desc"]],"lengthMenu": [[10,50,100, -1], [10,50,100, "All"]]});});</script>
+		<script type="text/javascript">function pauseshow(){window.stop();}</script>
 	</html>
 	<body>
 		<table align="center" style="table-layout: fixed ;">
@@ -70,12 +77,17 @@ run:
 				<button class="btn" value="Refresh Page" onClick="window.location.href=window.location.href">Reload Page</button>
 			</td>
 			<td>
-				<a><img src="__iconLink__" style="height:10vh;max-width:98%;"></a> 
+				&emsp;<a><img src="__iconLink1__" style="height:10vh;max-width:98%;"></a>&emsp;
 			</td>
 			<td>
 				<h3 style="color:#009688;" style="text-align: center;">
 					<b>__title__</b>
-				</h3>
+				</h3>__refreshInfo__
+			</td>
+			<td>&emsp;<td>
+			<td>__buttonStopRefresh__</td>
+			<td>
+				<a><img src="__iconLink2__" style="height:10vh;max-width:98%;"></a> 
 			</td>
 		</table>
 		<table class="table table-bordered"
@@ -86,6 +98,7 @@ run:
 					<th>Tests to be executed:</th>
 					<th>Test already executed:</th>
 					<th>Tests Skipped:</th>
+					<th>Tests Blocked:</th>
 					<th>Tests Passed:</th>
 					<th>Tests Failed:</th>
 				</tr>
@@ -96,7 +109,8 @@ run:
 					<td><b>__reportFile__</b></td>
 					<td><b>__expected__</b></td>
 					<td><b>__executed__</b></td>
-					<td bgcolor='""" + self.statusColors['yellow'] + """'><b>__skipped__</b></td>
+					<td bgcolor='""" + self.statusColors['blue'] + """'><b>__skipped__</b></td>
+					<td bgcolor='""" + self.statusColors['yellow'] + """'><b>__blocked__</b></td>
 					<td bgcolor='""" + self.statusColors['green'] + """'><b>__passed__</b></td>
 					<td bgcolor='""" + self.statusColors['red'] + """'><b>__failed__</b></td>
 				</tr>
@@ -118,7 +132,8 @@ run:
 			<tbody>
 			__content__        
         """
-        self.html_text = self.html_text.replace ("__iconLink__", self.RF_LIVE_LOGGING_ICON_PATH)
+        self.html_text = self.html_text.replace ("__iconLink1__", self.RF_LIVE_LOGGING_ICON_PATH_1)
+        self.html_text = self.html_text.replace ("__iconLink2__", self.RF_LIVE_LOGGING_ICON_PATH_2)
         _update_content(self, self.html_text, self.RF_LIVE_LOGGING_INITIAL_TITLE)
 
     def start_suite(self, suite, result):
@@ -174,9 +189,9 @@ run:
                 statusColor = self.statusColors['red']
             if test.message.startswith(self.ROBOT_PARENT_SUITE_SETUP_FAILED):
                 self.failed = self.failed - 1
-                self.skipped = self.skipped + 1
+                self.blocked = self.blocked + 1
                 statusColor = self.statusColors['yellow']
-                status = 'SKIP'
+                status = 'BLOCKED'
             #statusLink = "<a href='file:///" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
             statusLink = "<a href='" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
             criticalLink = str(test.critical)
@@ -214,13 +229,19 @@ def _get_current_date_time(format,trim):
 def _update_content(self, content, title):
     self.liveLogsFile = open(self.liveLogFilepath,'w')
     updated_content = content.replace("__title__", title)
+    updated_content = updated_content.replace("__refreshInfo__", "Refresh timer is set to '" + str(self.refresh) + "' seconds")
+    updated_content = updated_content.replace("__buttonStopRefresh__", self.buttonStopRefresh)
     if title == self.RF_LIVE_LOGGING_FINAL_TITLE:
+        updated_content = content.replace("__title__", title)
+        updated_content = updated_content.replace("__refreshInfo__", "")
+        updated_content = updated_content.replace("__buttonStopRefresh__", "")
         updated_content = updated_content.replace(self.refreshTimer, self.refreshStopped)
         updated_content = _add_result_links(self, updated_content, self.logFile, self.reportFile)
     updated_content = updated_content.replace("__expected__",str(self.expected))
     updated_content = updated_content.replace("__executed__",str(self.executed))
     updated_content = updated_content.replace("__passed__",str(self.passed))
     updated_content = updated_content.replace("__skipped__",str(self.skipped))
+    updated_content = updated_content.replace("__blocked__",str(self.blocked))
     updated_content = updated_content.replace("__failed__",str(self.failed))
     updated_content = updated_content.replace("__content__",str(self.content))
     self.liveLogsFile.write(updated_content)
