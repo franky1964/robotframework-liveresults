@@ -5,7 +5,7 @@ import pathlib
 from distutils.util import strtobool
 from robot.libraries.BuiltIn import BuiltIn
 
-__version__ = '2.0'
+__version__ = '1.0'
 
 class LiveResults:
     """|
@@ -49,6 +49,7 @@ run:
         self.blocked = 0
         self.passed = 0
         self.failed = 0
+        self.refresh = refresh
         self.refreshTimer = "http-equiv='refresh' content='" + str(refresh) + "'"
         self.refreshStopped = "http-equiv='refresh' content='5000'"
         self.content = ""
@@ -56,6 +57,7 @@ run:
         self.videoPath= ""
         self.statusColors = {'yellow':'#FFFF66', 'green':'#32CD32', 'red':'#CD5C5C', 'blue':'#87CEFA'}
         self.videoFoldername = "Videos"
+        self.buttonStopRefresh = "<button class='btn' value= 'Stop Reload' onclick= 'pauseshow()'>Stop Refresh</button>"
         self.html_text = """
         <html>
 	<title>Robot Framework Live Results</title>
@@ -75,16 +77,15 @@ run:
 				<button class="btn" value="Refresh Page" onClick="window.location.href=window.location.href">Reload Page</button>
 			</td>
 			<td>
-				<a><img src="__iconLink1__" style="height:10vh;max-width:98%;"></a> 
+				&emsp;<a><img src="__iconLink1__" style="height:10vh;max-width:98%;"></a>&emsp;
 			</td>
 			<td>
 				<h3 style="color:#009688;" style="text-align: center;">
 					<b>__title__</b>
-				</h3>
+				</h3>__refreshInfo__
 			</td>
-			<td>
-				<button class="btn" value="Stop Refresh" onclick="pauseshow()">Stop Refresh</button>
-			</td>
+			<td>&emsp;<td>
+			<td>__buttonStopRefresh__</td>
 			<td>
 				<a><img src="__iconLink2__" style="height:10vh;max-width:98%;"></a> 
 			</td>
@@ -228,7 +229,12 @@ def _get_current_date_time(format,trim):
 def _update_content(self, content, title):
     self.liveLogsFile = open(self.liveLogFilepath,'w')
     updated_content = content.replace("__title__", title)
+    updated_content = updated_content.replace("__refreshInfo__", "Refresh timer is set to '" + str(self.refresh) + "' seconds")
+    updated_content = updated_content.replace("__buttonStopRefresh__", self.buttonStopRefresh)
     if title == self.RF_LIVE_LOGGING_FINAL_TITLE:
+        updated_content = content.replace("__title__", title)
+        updated_content = updated_content.replace("__refreshInfo__", "")
+        updated_content = updated_content.replace("__buttonStopRefresh__", "")
         updated_content = updated_content.replace(self.refreshTimer, self.refreshStopped)
         updated_content = _add_result_links(self, updated_content, self.logFile, self.reportFile)
     updated_content = updated_content.replace("__expected__",str(self.expected))
