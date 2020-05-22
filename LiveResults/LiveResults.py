@@ -2,6 +2,7 @@ import os
 import datetime
 import webbrowser
 import pathlib
+import xml.etree.ElementTree as xmlElementTree
 from distutils.util import strtobool
 from robot.libraries.BuiltIn import BuiltIn
 
@@ -29,8 +30,8 @@ run:
     def __init__(self, show='False', capture='False', refresh=15, filename='RF_Live_Results.html'):
         print ("LiveResults - Parameter 'show' ist set to: " + str(show))
         print ("LiveResults - Parameter 'capture' ist set to: " + str(capture))
-        print ("LiveResults - Parameter 'filename' ist set to: " + filename)
         print ("LiveResults - Parameter 'refresh' ist set to: " + str(refresh))
+        print ("LiveResults - Parameter 'filename' ist set to: " + filename)
         self.ROBOT_PARENT_SUITE_SETUP_FAILED = 'Parent suite setup failed'
         self.RF_LIVE_LOGGING_INITIAL_TITLE = 'Robot Framework Live Results (Initialize...)'
         self.RF_LIVE_LOGGING_RUNNING_TITLE = 'Robot Framework Live Results (Running...)'
@@ -43,6 +44,7 @@ run:
         self.makeVideo = strtobool(capture)
         self.reportFile = None
         self.logFile = None
+        self.outputFile = None
         self.expected = 0
         self.executed = 0
         self.skipped = 0
@@ -142,6 +144,7 @@ run:
             self.PRE_RUNNER = 1
             self.logFile = BuiltIn().get_variable_value("${LOG FILE}")
             self.reportFile = BuiltIn().get_variable_value("${REPORT FILE}")
+            self.outputFile = BuiltIn().get_variable_value("${OUTPUT FILE}") 
             self.liveLogFilepath = os.path.join(pathlib.Path(self.reportFile).parent.absolute(), self.liveLogFilepath)
             self.videoPath = os.path.join(pathlib.Path(self.reportFile).parent.absolute(), self.videoFoldername)
             self.logFile = os.path.basename(self.logFile)
@@ -249,15 +252,27 @@ def _update_content(self, content, title):
 
 def _add_result_links(self, content, logFile, reportFile):
     #change if new pages should be opened
-    #add_link_ReportFile = """<a href=""" + reportFile.replace(' ', '%20') + """ target='_blank'>Report</a>"""
-    #add_link_LogFile = """<a href=""" + logFile.replace(' ', '%20') + """ target='_blank'>Log</a>"""
-    add_link_ReportFile = "<a href='" + self.reportFile + "'>Report</a>"
-    add_link_LogFile = "<a href='" + self.logFile + "'>Log</a>"
-    print ("LiveResults - Link to Log file: " + add_link_LogFile)
-    print ("LiveResults - Link to Report file: " + add_link_ReportFile)
-    updated_content = content.replace("__logFile__", add_link_LogFile)
-    updated_content = updated_content.replace("__reportFile__", add_link_ReportFile)
+    #linkToReportFile = """<a href=""" + reportFile.replace(' ', '%20') + """ target='_blank'>Report</a>"""
+    #linkToLogFile = """<a href=""" + logFile.replace(' ', '%20') + """ target='_blank'>Log</a>"""
+    _add_pass_rates(self.outputFile)
+    linkToReportFile = "<a href='" + self.reportFile + "'>Report</a>"
+    linkToLogFile = "<a href='" + self.logFile + "'>Log</a>"
+    print ("LiveResults - Link to Log file: " + linkToLogFile)
+    print ("LiveResults - Link to Report file: " + linkToReportFile)
+    updated_content = content.replace("__logFile__", linkToLogFile)
+    updated_content = updated_content.replace("__reportFile__", linkToReportFile)
     return updated_content;
- 
+
+def _add_pass_rates(path):  # Listener that parses the output XML when it is ready
+      """Additional lines to STDOUT, can be used for grep (or Jenkins with 'description-setter plugin')"""
+      root = xmlElementTree.parse(path).getroot()
+      for type_tag in root.findall('./statistics/total/stat'):
+        cntPassed = int(type_tag.attrib.get("pass"))  # attrib is dict-like (except for 'text')
+        cntFailed = int(type_tag.attrib.get("fail"))
+        cntTests = cntPassed + cntFailed
+        pct_pass = cntPassed / cntTests * 100
+        fmt_str = "{}: {} tests, {} passed, {} failed, {:.3g}% pass rate (--listener LiveResults)"
+        print(fmt_str.format(type_tag.text, cntTests, cntPassed, cntFailed, pct_pass))
+
 def _open_liveLogs(self, filepath):
     webbrowser.open_new_tab(filepath)
