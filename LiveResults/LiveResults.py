@@ -6,7 +6,7 @@ import xml.etree.ElementTree as xmlElementTree
 from distutils.util import strtobool
 from robot.libraries.BuiltIn import BuiltIn
 
-__version__ = '1.0'
+__version__ = '2.0'
 
 class LiveResults:
     """|

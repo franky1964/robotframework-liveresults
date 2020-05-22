@@ -26,7 +26,7 @@ Available Results:
  - The default name of the page is "RF_LiveResults.html', it is located in the same directory as 'report.html' and 'log.html'
  - The result "PASS" or "FAIL" contains a link to the detailed testcase log
  - "BLOCKED" is set as testcase result if the Testsuite Setup was executed with an error
- - "SKIP" is already added for future version fo Robot Framework supporting this status
+ - "SKIP" is already added for any future version of Robot Framework supporting this status
  - In case of captured videos the column "Critical' contains a link to the captured video of the testcase execution 
    (the following library has to be installed for this option: <a href="https://github.com/mihaiparvu/ScreenCapLibrary">ScreenCapLibrary</a>)
 ---
