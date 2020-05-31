@@ -6,11 +6,15 @@ import xml.etree.ElementTree as xmlElementTree
 from distutils.util import strtobool
 from robot.libraries.BuiltIn import BuiltIn
 
-<<<<<<< HEAD
-__version__ = '2.0'
-=======
+
+
+
+
 __version__ = '2.5'
->>>>>>> develop
+
+
+
+
 
 class LiveResults:
     """|
@@ -242,7 +246,7 @@ def _get_current_date_time(format,trim):
 def _update_content(self, content, title):
     self.liveLogsFile = open(self.liveLogFilepath,'w')
     updated_content = content.replace("__title__", title)
-    updated_content = updated_content.replace("__refreshInfo__", "Refresh timer is set to '" + str(self.refresh) + "' seconds")
+    updated_content = updated_content.replace("__refreshInfo__", "Refresh timer is set to '" + str(self.refresh) + "' seconds and provided links in column 'Status' can still not be used...")
     updated_content = updated_content.replace("__buttonStopRefresh__", self.buttonStopRefresh)
     if title == self.RF_LIVE_LOGGING_FINAL_TITLE:
         updated_content = content.replace("__title__", title)
