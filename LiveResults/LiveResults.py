@@ -192,6 +192,12 @@ run:
                 self.blocked = self.blocked + 1
                 statusColor = self.statusColors['yellow']
                 status = 'BLOCKED'
+            #Check if test was executed or not, if not set to SKIPPED
+            if test.elapsedtime < 2 and status == "FAIL":
+                self.failed = self.failed - 1
+                self.skipped = self.skipped + 1
+                statusColor = self.statusColors['blue']
+                status = 'SKIPPED'
             #statusLink = "<a href='file:///" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
             statusLink = "<a href='" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
             criticalLink = str(test.critical)
