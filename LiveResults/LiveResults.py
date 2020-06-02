@@ -6,7 +6,7 @@ import xml.etree.ElementTree as xmlElementTree
 from distutils.util import strtobool
 from robot.libraries.BuiltIn import BuiltIn
 
-__version__ = '2.5'
+__version__ = '2.6'
 
 class LiveResults:
     """|
@@ -33,6 +33,8 @@ run:
         print ("LiveResults - Parameter 'refresh' ist set to: " + str(refresh))
         print ("LiveResults - Parameter 'filename' ist set to: " + filename)
         self.ROBOT_PARENT_SUITE_SETUP_FAILED = 'Parent suite setup failed'
+        self.ROBOT_EXIT_ON_ERROR_MODE_USED = 'exit-on-error mode is in use'
+        self.ROBOT_EXIT_ON_FAILURE_MODE_USED = 'exit-on-failure mode is in use'
         self.RF_LIVE_LOGGING_INITIAL_TITLE = 'Robot Framework Live Results (Initialize...)'
         self.RF_LIVE_LOGGING_RUNNING_TITLE = 'Robot Framework Live Results (Running...)'
         self.RF_LIVE_LOGGING_FINAL_TITLE = 'Robot Framework Live Results (Execution completed)'
@@ -196,7 +198,7 @@ run:
                 statusColor = self.statusColors['yellow']
                 status = 'BLOCKED'
             #Check if test was executed or not, if not set to SKIPPED
-            if test.elapsedtime < 2 and status == "FAIL":
+            if (self.ROBOT_EXIT_ON_ERROR_MODE_USED in test.message) or (self.ROBOT_EXIT_ON_FAILURE_MODE_USED in test.message):
                 self.failed = self.failed - 1
                 self.skipped = self.skipped + 1
                 statusColor = self.statusColors['blue']
