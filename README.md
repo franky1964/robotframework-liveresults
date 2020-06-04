@@ -6,7 +6,7 @@ Robot Framework Listener to get Live Results in a web page while RF execution is
     
 Steps to Use:
 
- - Step 1: Installation:
+ - Step 1: Installation
    > - Download or clone this repo
    > -   or Copy `LiveResults` folder to your project 
    > -   or use 'pip install git+https://github.com/franky1964/robotframework-liveresults.git'
@@ -14,7 +14,7 @@ Steps to Use:
  - Step 2: Execute test case/suites using LiveResults Listener
    > - `robot --listener LiveResults Tests` 
 
- - Step 3 options to be used:
+ - Step 3: Options to be used
    > - Change the default value to open the browser:             robot --listener LiveResults:True
    > - Activate option to capture videos of test execution:      robot --listener LiveResults:False:True
    > - Change the timer value for autorefresh in HTML page:      robot --listener LiveResults:False:False:60
@@ -23,11 +23,11 @@ Steps to Use:
 ---
 
 Available Results:
- - The default name of the page is "RF_LiveResults.html', it is located in the same directory as 'report.html' and 'log.html'
- - The result "PASS" or "FAIL" contains a link to the detailed testcase log
- - "BLOCKED" is set as testcase result if the testsuite setup was executed with an error
- - "SKIPPED" is set for testcases not beeing executed according to option '--exitonfailure' or '--exitonerror' was used
- - In case of captured videos the column "Critical' contains a link to the captured video of the testcase execution 
+ - The default name of the page is 'RF_LiveResults.html', it is located in the same directory as 'report.html' and 'log.html'
+ - The column 'Status' includes a link to the detailed testcase log (only useable after test execution has finished)
+ - 'BLOCKED' is set as testcase result if the testsuite setup was executed with an error
+ - 'SKIPPED' is set for testcases not beeing executed according to option '--exitonfailure' or '--exitonerror' was used
+ - In case of captured videos the column 'Critical' contains a link to the captured video of the testcase execution 
    (the following library has to be installed for this option: <a href="https://github.com/mihaiparvu/ScreenCapLibrary">ScreenCapLibrary</a>)
 ---
 
