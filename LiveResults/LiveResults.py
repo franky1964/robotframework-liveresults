@@ -6,7 +6,7 @@ import xml.etree.ElementTree as xmlElementTree
 from distutils.util import strtobool
 from robot.libraries.BuiltIn import BuiltIn
 
-__version__ = '2.6'
+__version__ = '2.7'
 
 class LiveResults:
     """|
@@ -269,7 +269,7 @@ def _add_result_links(self, content, logFile, reportFile):
     print ("LiveResults - Link to Report file: " + linkToReportFile)
     updated_content = content.replace("__logFile__", linkToLogFile)
     updated_content = updated_content.replace("__reportFile__", linkToReportFile)
-    return updated_content;
+    return updated_content
 
 def _add_pass_rates(path):  # Listener that parses the output XML when it is ready
       """Additional lines to STDOUT, can be used for grep (or Jenkins with 'description-setter plugin')"""
@@ -278,9 +278,11 @@ def _add_pass_rates(path):  # Listener that parses the output XML when it is rea
         cntPassed = int(type_tag.attrib.get("pass"))  # attrib is dict-like (except for 'text')
         cntFailed = int(type_tag.attrib.get("fail"))
         cntTests = cntPassed + cntFailed
-        pct_pass = cntPassed / cntTests * 100
-        fmt_str = "{}: {} tests, {} passed, {} failed, {:.3g}% pass rate (--listener LiveResults)"
-        print(fmt_str.format(type_tag.text, cntTests, cntPassed, cntFailed, pct_pass))
+        #changed since the value for 'cntTests' in case of 'Critical Tests' could be '0'
+        if cntTests > 0:
+          pct_pass = cntPassed / cntTests * 100
+          fmt_str = "{}: {} tests, {} passed, {} failed, {:.3g}% pass rate (--listener LiveResults)"
+          print(fmt_str.format(type_tag.text, cntTests, cntPassed, cntFailed, pct_pass))
 
 def _open_liveLogs(self, filepath):
     webbrowser.open_new_tab(filepath)
