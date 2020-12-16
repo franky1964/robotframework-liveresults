@@ -6,7 +6,7 @@ import xml.etree.ElementTree as xmlElementTree
 from distutils.util import strtobool
 from robot.libraries.BuiltIn import BuiltIn
 
-__version__ = '2.8'
+__version__ = '4.0'
 
 class LiveResults:
     """|
@@ -14,7 +14,7 @@ class LiveResults:
 ===================================================
 robotframework-liveresults
 ===================================================
-Live Results ... 
+Live Results ...
 |
 Installation
 ------------
@@ -22,11 +22,11 @@ If you already have Python >= 3.6 with pip and git installed, you can simply
 run:
 ``pip install --upgrade git+https://github.com/franky1964/robotframework-liveresults.git``
 """
-	
-    ROBOT_LISTENER_API_VERSION = 3
-#https://stackoverflow.com/questions/28435865/can-i-stop-a-meta-refresh-using-javascript
 
- 
+    ROBOT_LISTENER_API_VERSION = 3
+    #https://stackoverflow.com/questions/28435865/can-i-stop-a-meta-refresh-using-javascript
+
+
     def __init__(self, show='False', capture='False', refresh=15, filename='RF_Live_Results.html'):
         print ("LiveResults - Parameter 'show' ist set to: " + str(show))
         print ("LiveResults - Parameter 'capture' ist set to: " + str(capture))
@@ -64,77 +64,77 @@ run:
         self.buttonStopRefresh = "<button class='btn' value= 'Stop Reload' onclick= 'pauseshow()'>Stop Refresh</button>"
         self.html_text = """
         <html>
-	<title>Robot Framework Live Results</title>
-	<meta """ + self.refreshTimer + """>
-		<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" />
-		<script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script>
-		<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" type="text/javascript"></script>
-		<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js" type="text/javascript"></script>
-		<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js" type="text/javascript"></script>
-		<script>$(document).ready(function() {$('#live').DataTable({"order": [[0, "desc"]],"lengthMenu": [[10,50,100, -1], [10,50,100, "All"]]});});</script>
-		<script type="text/javascript">function pauseshow(){window.stop();}</script>
-	</html>
-	<body>
-		<table align="center" style="table-layout: fixed ;">
-			<td style="text-align: left;">
-				<button class="btn" value="Refresh Page" onClick="window.location.href=window.location.href">Reload Page</button>
-			</td>
-			<td>
-				&emsp;<a><img src="__iconLink1__" style="height:10vh;max-width:98%;"></a>&emsp;
-			</td>
-			<td>
-				<h3 style="color:#009688;" style="text-align: center;">
-					<b>__title__</b>
-				</h3>__refreshInfo__
-			</td>
-			<td>&emsp;<td>
-			<td>__buttonStopRefresh__</td>
-			<td>
-				<a><img src="__iconLink2__" style="height:10vh;max-width:98%;"></a> 
-			</td>
-		</table>
-		<table class="table table-bordered"
-			<thead>
-				<tr style="text-align:center">
-					<th>Log File:</th>
-					<th>Report File:</th>
-					<th>Tests to be executed:</th>
-					<th>Test already executed:</th>
-					<th>Tests Skipped:</th>
-					<th>Tests Blocked:</th>
-					<th>Tests Passed:</th>
-					<th>Tests Failed:</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr style="text-align:center">
-					<td><b>__logFile__</b></td>
-					<td><b>__reportFile__</b></td>
-					<td><b>__expected__</b></td>
-					<td><b>__executed__</b></td>
-					<td bgcolor='""" + self.statusColors['blue'] + """'><b>__skipped__</b></td>
-					<td bgcolor='""" + self.statusColors['yellow'] + """'><b>__blocked__</b></td>
-					<td bgcolor='""" + self.statusColors['green'] + """'><b>__passed__</b></td>
-					<td bgcolor='""" + self.statusColors['red'] + """'><b>__failed__</b></td>
-				</tr>
-			</tbody>
-		</table>
-		<table id="live" class="table table-striped table-bordered">
-			<thead>
-				<tr>
-					<th>Start Time</th>
-					<th>Elapsed</th>
-					<th>Parent Suite Name</th>
-					<th>Test Name</th>
-					<th>Tags</th>
-					<th>Critical</th>
-					<th>Status</th>
-					<th>Message</th>
-				</tr>
-			</thead>
-			<tbody>
-			__content__        
+   <title>Robot Framework Live Results</title>
+   <meta """ + self.refreshTimer + """>
+      <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" />
+      <script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script>
+      <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" type="text/javascript"></script>
+      <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js" type="text/javascript"></script>
+      <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js" type="text/javascript"></script>
+      <script>$(document).ready(function() {$('#live').DataTable({"order": [[0, "desc"]],"lengthMenu": [[10,50,100, -1], [10,50,100, "All"]]});});</script>
+      <script type="text/javascript">function pauseshow(){window.stop();}</script>
+   </html>
+   <body>
+      <table align="center" style="table-layout: fixed ;">
+         <td style="text-align: left;">
+            <button class="btn" value="Refresh Page" onClick="window.location.href=window.location.href">Reload Page</button>
+         </td>
+         <td>
+            &emsp;<a><img src="__iconLink1__" style="height:10vh;max-width:98%;"></a>&emsp;
+         </td>
+         <td>
+            <h3 style="color:#009688;" style="text-align: center;">
+               <b>__title__</b>
+            </h3>__refreshInfo__
+         </td>
+         <td>&emsp;<td>
+         <td>__buttonStopRefresh__</td>
+         <td>
+            <a><img src="__iconLink2__" style="height:10vh;max-width:98%;"></a> 
+         </td>
+      </table>
+      <table class="table table-bordered"
+         <thead>
+            <tr style="text-align:center">
+               <th>Log File:</th>
+               <th>Report File:</th>
+               <th>Tests to be executed:</th>
+               <th>Test already executed:</th>
+               <th>Tests Skipped:</th>
+               <th>Tests Blocked:</th>
+               <th>Tests Passed:</th>
+               <th>Tests Failed:</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr style="text-align:center">
+               <td><b>__logFile__</b></td>
+               <td><b>__reportFile__</b></td>
+               <td><b>__expected__</b></td>
+               <td><b>__executed__</b></td>
+               <td bgcolor='""" + self.statusColors['blue'] + """'><b>__skipped__</b></td>
+               <td bgcolor='""" + self.statusColors['yellow'] + """'><b>__blocked__</b></td>
+               <td bgcolor='""" + self.statusColors['green'] + """'><b>__passed__</b></td>
+               <td bgcolor='""" + self.statusColors['red'] + """'><b>__failed__</b></td>
+            </tr>
+         </tbody>
+      </table>
+      <table id="live" class="table table-striped table-bordered">
+         <thead>
+            <tr>
+               <th>Start Time</th>
+               <th>Elapsed</th>
+               <th>Parent Suite Name</th>
+               <th>Test Name</th>
+               <th>Tags</th>
+               <th>Critical</th>
+               <th>Status</th>
+               <th>Message</th>
+            </tr>
+         </thead>
+         <tbody>
+         __content__        
         """
         self.html_text = self.html_text.replace ("__iconLink1__", self.RF_LIVE_LOGGING_ICON_PATH_1)
         self.html_text = self.html_text.replace ("__iconLink2__", self.RF_LIVE_LOGGING_ICON_PATH_2)
@@ -146,7 +146,7 @@ run:
             self.PRE_RUNNER = 1
             self.logFile = BuiltIn().get_variable_value("${LOG FILE}")
             self.reportFile = BuiltIn().get_variable_value("${REPORT FILE}")
-            self.outputFile = BuiltIn().get_variable_value("${OUTPUT FILE}") 
+            self.outputFile = BuiltIn().get_variable_value("${OUTPUT FILE}")
             self.liveLogFilepath = os.path.join(pathlib.Path(self.reportFile).parent.absolute(), self.liveLogFilepath)
             self.videoPath = os.path.join(pathlib.Path(self.reportFile).parent.absolute(), self.videoFoldername)
             self.logFile = os.path.basename(self.logFile)
@@ -154,18 +154,18 @@ run:
             self.expected = suite.test_count
             _update_content(self, self.html_text, self.RF_LIVE_LOGGING_RUNNING_TITLE)
             if self.openBrowser:
-              print ("LiveResults - Default browser is opened with page: " + self.liveLogFilepath)
-              _open_liveLogs(self, self.liveLogFilepath)
+                print ("LiveResults - Default browser is opened with page: " + self.liveLogFilepath)
+                _open_liveLogs(self, self.liveLogFilepath)
             if self.makeVideo:
-              try:
-                BuiltIn().import_library('ScreenCapLibrary')
-                self.screencaplib = BuiltIn().get_library_instance('ScreenCapLibrary')
-                print ("LiveResults - Videos will be saved in : " + self.videoPath)
-                if not os.path.exists(self.videoPath):
-                  os.makedirs(self.videoPath)
-              except:
-                self.makeVideo = False
-                BuiltIn().log('LiveResults: To get videos for test case executions please install the following library: <a href="https://github.com/mihaiparvu/ScreenCapLibrary">ScreenCapLibrary</a>','ERROR','HTML')
+                try:
+                    BuiltIn().import_library('ScreenCapLibrary')
+                    self.screencaplib = BuiltIn().get_library_instance('ScreenCapLibrary')
+                    print ("LiveResults - Videos will be saved in : " + self.videoPath)
+                    if not os.path.exists(self.videoPath):
+                        os.makedirs(self.videoPath)
+                except:
+                    self.makeVideo = False
+                    BuiltIn().log('LiveResults: To get videos for test case executions please install the following library: <a href="https://github.com/mihaiparvu/ScreenCapLibrary">ScreenCapLibrary</a>','ERROR','HTML')
         self.test_count = len(suite.tests)
         if self.test_count != 0:
             self.suite_name = suite.name
@@ -186,9 +186,12 @@ run:
             tags = test.tags
             if len(tags) == 0: tags = ""
             status = test.status
-            if test.status == 'PASS':
+            if (test.status == 'PASS'):
                 self.passed = self.passed + 1
                 statusColor = self.statusColors['green']
+            elif (test.status == 'SKIP'):
+                self.skipped = self.skipped + 1
+                statusColor = self.statusColors['blue']
             else:
                 self.failed = self.failed + 1
                 statusColor = self.statusColors['red']
@@ -202,25 +205,25 @@ run:
                 self.failed = self.failed - 1
                 self.skipped = self.skipped + 1
                 statusColor = self.statusColors['blue']
-                status = 'SKIPPED'
+                status = 'SKIP'
             #statusLink = "<a href='file:///" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
             statusLink = "<a href='" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
             criticalLink = str(test.critical)
             #if self.makeVideo: criticalLink = "<a href='file:///" + self.videoFilename + "' target='_blank'>" + criticalLink + "</a>"
             if self.makeVideo:
-               criticalLink = "<a href='" + self.videoFilename + "' target='_blank'>" + criticalLink + "</a>"
-               self.screencaplib.stop_video_recording()
+                criticalLink = "<a href='" + self.videoFilename + "' target='_blank'>" + criticalLink + "</a>"
+                self.screencaplib.stop_video_recording()
             test_detail_message = """
-					<tr>
-						<td style="text-align: left;max-width: 70px;">%s</td>
-						<td style="text-align: left;max-width: 70px;">%s</td>
-						<td style="text-align: left;max-width: 190px;">%s</td>
-						<td style="text-align: left;max-width: 210px;">%s</td>
-						<td style="text-align: left;max-width: 140px;">%s</td>
-						<td style="text-align: center;">%s</td>
-						<td bgcolor='%s' style="text-align: center;">%s</td>
-						<td style="text-align: left;max-width: 250px;">%s</td>
-					</tr>
+               <tr>
+                  <td style="text-align: left;max-width: 70px;">%s</td>
+                  <td style="text-align: left;max-width: 70px;">%s</td>
+                  <td style="text-align: left;max-width: 190px;">%s</td>
+                  <td style="text-align: left;max-width: 210px;">%s</td>
+                  <td style="text-align: left;max-width: 140px;">%s</td>
+                  <td style="text-align: center;">%s</td>
+                  <td bgcolor='%s' style="text-align: center;">%s</td>
+                  <td style="text-align: left;max-width: 250px;">%s</td>
+               </tr>
             """ %(str(self.test_start_time), str(self.elapsed), str(self.suite_name), str(test), str(tags), str(criticalLink), str(statusColor), str(statusLink), str(test.message))
             self.content += test_detail_message
             _update_content(self, self.html_text, self.RF_LIVE_LOGGING_RUNNING_TITLE)
@@ -272,17 +275,17 @@ def _add_result_links(self, content, logFile, reportFile):
     return updated_content
 
 def _add_pass_rates(path):  # Listener that parses the output XML when it is ready
-      """Additional lines to STDOUT, can be used for grep (or Jenkins with 'description-setter plugin')"""
-      root = xmlElementTree.parse(path).getroot()
-      for type_tag in root.findall('./statistics/total/stat'):
+    """Additional lines to STDOUT, can be used for grep (or Jenkins with 'description-setter plugin')"""
+    root = xmlElementTree.parse(path).getroot()
+    for type_tag in root.findall('./statistics/total/stat'):
         cntPassed = int(type_tag.attrib.get("pass"))  # attrib is dict-like (except for 'text')
         cntFailed = int(type_tag.attrib.get("fail"))
         cntTests = cntPassed + cntFailed
         #changed since the value for 'cntTests' in case of 'Critical Tests' could be '0'
         if cntTests > 0:
-          pct_pass = cntPassed / cntTests * 100
-          fmt_str = "{}: {} tests, {} passed, {} failed, {:.3g}% pass rate (--listener LiveResults)"
-          print(fmt_str.format(type_tag.text, cntTests, cntPassed, cntFailed, pct_pass))
+            pct_pass = cntPassed / cntTests * 100
+            fmt_str = "{}: {} tests, {} passed, {} failed, {:.3g}% pass rate (--listener LiveResults)"
+            print(fmt_str.format(type_tag.text, cntTests, cntPassed, cntFailed, pct_pass))
 
 def _open_liveLogs(self, filepath):
     webbrowser.open_new_tab(filepath)
