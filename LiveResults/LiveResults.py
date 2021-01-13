@@ -6,7 +6,7 @@ import xml.etree.ElementTree as xmlElementTree
 from distutils.util import strtobool
 from robot.libraries.BuiltIn import BuiltIn
 
-__version__ = '4.0'
+__version__ = '4.1'
 
 class LiveResults:
     """|
@@ -53,6 +53,8 @@ run:
         self.blocked = 0
         self.passed = 0
         self.failed = 0
+        self.totalTime = "00:00"
+        self.runStartTime = ""
         self.refresh = refresh
         self.refreshTimer = "http-equiv='refresh' content='" + str(refresh) + "'"
         self.refreshStopped = "http-equiv='refresh' content='5000'"
@@ -99,6 +101,7 @@ run:
             <tr style="text-align:center">
                <th>Log File:</th>
                <th>Report File:</th>
+               <th>Total Time:</th>
                <th>Tests to be executed:</th>
                <th>Test already executed:</th>
                <th>Tests Skipped:</th>
@@ -111,6 +114,7 @@ run:
             <tr style="text-align:center">
                <td><b>__logFile__</b></td>
                <td><b>__reportFile__</b></td>
+               <td><b>__totalTime__</b></td>
                <td><b>__expected__</b></td>
                <td><b>__executed__</b></td>
                <td bgcolor='""" + self.statusColors['blue'] + """'><b>__skipped__</b></td>
@@ -144,6 +148,7 @@ run:
         # count expected total testcases and open bowser only on top level
         if self.PRE_RUNNER == 0:
             self.PRE_RUNNER = 1
+            self.runStartTime = datetime.datetime.now()
             self.logFile = BuiltIn().get_variable_value("${LOG FILE}")
             self.reportFile = BuiltIn().get_variable_value("${REPORT FILE}")
             self.outputFile = BuiltIn().get_variable_value("${OUTPUT FILE}")
@@ -171,8 +176,8 @@ run:
             self.suite_name = suite.name
 
     def start_test(self, data, test):
-        self.test_start_time = _get_current_date_time('%Y-%m-%d %H:%M:%S.%f',True)
-        if (self.makeVideo):
+       self.test_start_time = _get_current_date_time('%Y-%m-%d %H:%M:%S.%f',True)
+       if self.makeVideo:
             self.test_case_name = str(test)
             self.screencaplib.set_screenshot_directory(self.videoPath)
             self.screencaplib.start_video_recording(name=str(self.test_case_name))
@@ -183,6 +188,8 @@ run:
         if self.test_count != 0:
             self.executed = self.executed + 1
             self.elapsed = str(datetime.timedelta(milliseconds=test.elapsedtime))[:-3]
+            timediff = datetime.datetime.now() - self.runStartTime
+            self.totalTime = str(timediff)[:-3]
             tags = test.tags
             if len(tags) == 0: tags = ""
             status = test.status
@@ -231,7 +238,7 @@ run:
     def close(self):
         _update_content(self, self.html_text, self.RF_LIVE_LOGGING_FINAL_TITLE)
 
-def _get_current_date_time(format,trim):
+def _get_current_date_time(format, trim):
     t = datetime.datetime.now()
     if t.microsecond % 1000 >= 500:  # check if there will be rounding up
         t = t + datetime.timedelta(milliseconds=1)  # manually round up
@@ -245,6 +252,7 @@ def _update_content(self, content, title):
     updated_content = content.replace("__title__", title)
     updated_content = updated_content.replace("__refreshInfo__", "Refresh timer is set to '" + str(self.refresh) + "' seconds and provided links in column 'Status' can still not be used...")
     updated_content = updated_content.replace("__buttonStopRefresh__", self.buttonStopRefresh)
+    updated_content = updated_content.replace("__totalTime__", self.totalTime)
     if title == self.RF_LIVE_LOGGING_FINAL_TITLE:
         updated_content = content.replace("__title__", title)
         updated_content = updated_content.replace("__refreshInfo__", "")
@@ -272,6 +280,7 @@ def _add_result_links(self, content, logFile, reportFile):
     print ("LiveResults - Link to Report file: " + linkToReportFile)
     updated_content = content.replace("__logFile__", linkToLogFile)
     updated_content = updated_content.replace("__reportFile__", linkToReportFile)
+    updated_content = updated_content.replace("__totalTime__", self.totalTime)
     return updated_content
 
 def _add_pass_rates(path):  # Listener that parses the output XML when it is ready
