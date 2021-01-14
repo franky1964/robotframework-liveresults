@@ -6,7 +6,7 @@ import xml.etree.ElementTree as xmlElementTree
 from distutils.util import strtobool
 from robot.libraries.BuiltIn import BuiltIn
 
-__version__ = '4.1'
+__version__ = '4.2'
 
 class LiveResults:
     """|
@@ -132,7 +132,7 @@ run:
                <th>Parent Suite Name</th>
                <th>Test Name</th>
                <th>Tags</th>
-               <th>Critical</th>
+               <th>Teardown</th>
                <th>Status</th>
                <th>Message</th>
             </tr>
@@ -215,10 +215,10 @@ run:
                 status = 'SKIP'
             #statusLink = "<a href='file:///" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
             statusLink = "<a href='" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
-            criticalLink = str(test.critical)
-            #if self.makeVideo: criticalLink = "<a href='file:///" + self.videoFilename + "' target='_blank'>" + criticalLink + "</a>"
+            teardownLink = str(test.teardown)
+            #if self.makeVideo: teardownLink = "<a href='file:///" + self.videoFilename + "' target='_blank'>" + teardownLink + "</a>"
             if self.makeVideo:
-                criticalLink = "<a href='" + self.videoFilename + "' target='_blank'>" + criticalLink + "</a>"
+                criticalLink = "<a href='" + self.videoFilename + "' target='_blank'>" + teardownLink + "</a>"
                 self.screencaplib.stop_video_recording()
             test_detail_message = """
                <tr>
@@ -231,7 +231,7 @@ run:
                   <td bgcolor='%s' style="text-align: center;">%s</td>
                   <td style="text-align: left;max-width: 250px;">%s</td>
                </tr>
-            """ %(str(self.test_start_time), str(self.elapsed), str(self.suite_name), str(test), str(tags), str(criticalLink), str(statusColor), str(statusLink), str(test.message))
+            """ %(str(self.test_start_time), str(self.elapsed), str(self.suite_name), str(test), str(tags), str(teardownLink), str(statusColor), str(statusLink), str(test.message))
             self.content += test_detail_message
             _update_content(self, self.html_text, self.RF_LIVE_LOGGING_RUNNING_TITLE)
 
