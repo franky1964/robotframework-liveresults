@@ -215,7 +215,7 @@ run:
                 status = 'SKIP'
             #statusLink = "<a href='file:///" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
             statusLink = "<a href='" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
-            teardownLink = str(test.teardown)
+            teardownLink =  "yes" if (data.teardown) else "no"
             #if self.makeVideo: teardownLink = "<a href='file:///" + self.videoFilename + "' target='_blank'>" + teardownLink + "</a>"
             if self.makeVideo:
                 criticalLink = "<a href='" + self.videoFilename + "' target='_blank'>" + teardownLink + "</a>"
