@@ -132,7 +132,7 @@ run:
                <th>Parent Suite Name</th>
                <th>Test Name</th>
                <th>Tags</th>
-               <th>Teardown</th>
+               <th>Setup/Teardown</th>
                <th>Status</th>
                <th>Message</th>
             </tr>
@@ -215,10 +215,12 @@ run:
                 status = 'SKIP'
             #statusLink = "<a href='file:///" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
             statusLink = "<a href='" + self.logFile + "#" + test.id + "' target='_blank'>" + status + "</a>"
-            teardownLink =  "yes" if (data.teardown) else "no"
-            #if self.makeVideo: teardownLink = "<a href='file:///" + self.videoFilename + "' target='_blank'>" + teardownLink + "</a>"
+            hasSetup = "yes" if (data.setup) else "no"
+            hasTeardown = "yes" if (data.teardown) else "no"
+            detailsLink = hasSetup + " / " + hasTeardown
+            #if self.makeVideo: detailsLink = "<a href='file:///" + self.videoFilename + "' target='_blank'>" + detailsLink + "</a>"
             if self.makeVideo:
-                criticalLink = "<a href='" + self.videoFilename + "' target='_blank'>" + teardownLink + "</a>"
+                criticalLink = "<a href='" + self.videoFilename + "' target='_blank'>" + detailsLink + "</a>"
                 self.screencaplib.stop_video_recording()
             test_detail_message = """
                <tr>
@@ -231,7 +233,7 @@ run:
                   <td bgcolor='%s' style="text-align: center;">%s</td>
                   <td style="text-align: left;max-width: 250px;">%s</td>
                </tr>
-            """ %(str(self.test_start_time), str(self.elapsed), str(self.suite_name), str(test), str(tags), str(teardownLink), str(statusColor), str(statusLink), str(test.message))
+            """ %(str(self.test_start_time), str(self.elapsed), str(self.suite_name), str(test), str(tags), str(detailsLink), str(statusColor), str(statusLink), str(test.message))
             self.content += test_detail_message
             _update_content(self, self.html_text, self.RF_LIVE_LOGGING_RUNNING_TITLE)
 
