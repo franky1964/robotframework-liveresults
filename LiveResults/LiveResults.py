@@ -28,10 +28,10 @@ run:
 
 
     def __init__(self, show='False', capture='False', refresh=15, filename='RF_Live_Results.html'):
-        print ("LiveResults - Parameter 'show' ist set to: " + str(show))
-        print ("LiveResults - Parameter 'capture' ist set to: " + str(capture))
-        print ("LiveResults - Parameter 'refresh' ist set to: " + str(refresh))
-        print ("LiveResults - Parameter 'filename' ist set to: " + filename)
+        print("LiveResults - Parameter 'show' ist set to: " + str(show))
+        print("LiveResults - Parameter 'capture' ist set to: " + str(capture))
+        print("LiveResults - Parameter 'refresh' ist set to: " + str(refresh))
+        print("LiveResults - Parameter 'filename' ist set to: " + filename)
         self.ROBOT_PARENT_SUITE_SETUP_FAILED = 'Parent suite setup failed'
         self.ROBOT_EXIT_ON_ERROR_MODE_USED = 'exit-on-error mode is in use'
         self.ROBOT_EXIT_ON_FAILURE_MODE_USED = 'exit-on-failure mode is in use'
@@ -55,6 +55,7 @@ run:
         self.failed = 0
         self.totalTime = "00:00"
         self.runStartTime = ""
+        self.topSuite = ""
         self.refresh = refresh
         self.refreshTimer = "http-equiv='refresh' content='" + str(refresh) + "'"
         self.refreshStopped = "http-equiv='refresh' content='5000'"
@@ -101,6 +102,7 @@ run:
             <tr style="text-align:center">
                <th>Log File:</th>
                <th>Report File:</th>
+               <th>Suite Name:</th>
                <th>Total Time:</th>
                <th>Tests to be executed:</th>
                <th>Test already executed:</th>
@@ -114,6 +116,7 @@ run:
             <tr style="text-align:center">
                <td><b>__logFile__</b></td>
                <td><b>__reportFile__</b></td>
+               <td><b>__suiteName__</b></td>
                <td><b>__totalTime__</b></td>
                <td><b>__expected__</b></td>
                <td><b>__executed__</b></td>
@@ -157,6 +160,7 @@ run:
             self.logFile = os.path.basename(self.logFile)
             self.reportFile = os.path.basename(self.reportFile)
             self.expected = suite.test_count
+            self.topSuite = suite.name
             _update_content(self, self.html_text, self.RF_LIVE_LOGGING_RUNNING_TITLE)
             if self.openBrowser:
                 print ("LiveResults - Default browser is opened with page: " + self.liveLogFilepath)
@@ -254,6 +258,7 @@ def _update_content(self, content, title):
     updated_content = content.replace("__title__", title)
     updated_content = updated_content.replace("__refreshInfo__", "Refresh timer is set to '" + str(self.refresh) + "' seconds and provided links in column 'Status' can still not be used...")
     updated_content = updated_content.replace("__buttonStopRefresh__", self.buttonStopRefresh)
+    updated_content = updated_content.replace("__suiteName__", self.topSuite)
     updated_content = updated_content.replace("__totalTime__", self.totalTime)
     if title == self.RF_LIVE_LOGGING_FINAL_TITLE:
         updated_content = content.replace("__title__", title)
@@ -282,6 +287,7 @@ def _add_result_links(self, content, logFile, reportFile):
     print ("LiveResults - Link to Report file: " + linkToReportFile)
     updated_content = content.replace("__logFile__", linkToLogFile)
     updated_content = updated_content.replace("__reportFile__", linkToReportFile)
+    updated_content = updated_content.replace("__suiteName__", self.topSuite)
     updated_content = updated_content.replace("__totalTime__", self.totalTime)
     return updated_content
 
